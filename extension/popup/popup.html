@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ShieldCheck</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <div class="popup-container">
+    <header class="popup-header">
+      <div class="title-group">
+        <div class="logo-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <h1 class="title">ShieldCheck</h1>
+      </div>
+      <button class="header-settings" id="btn-header-settings">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+      </button>
+    </header>
+
+    <!-- Home View -->
+    <main id="view-home" class="view-section active">
+      
+      <div id="loading-state" class="state-container">
+        <div class="spinner"></div>
+        <p class="state-title">Scanning Page</p>
+        <p class="state-desc">Analyzing financial integrity...</p>
+      </div>
+
+      <div id="no-scan-state" class="state-container hidden">
+        <div class="state-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--text-secondary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <p class="state-title">Ready to Scan</p>
+        <p class="state-desc">Click below to analyze this page for dark patterns.</p>
+        <div class="actions" style="margin-top:20px; width:100%">
+          <button class="btn btn-primary" id="btn-force-scan">Scan Now</button>
+        </div>
+      </div>
+
+      <div id="result-state" class="hidden">
+        <div class="domain-banner">
+          <span class="domain-label">Active Analysis</span>
+          <span class="domain-name" id="current-domain">example.com</span>
+        </div>
+
+        <div class="score-card">
+          <div class="score-ring-container">
+            <div class="score-ring" id="score-ring"><span id="score-value">-</span></div>
+            <div class="score-subtitle">Risk Score</div>
+          </div>
+          <div class="risk-badge" id="risk-badge">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+            <span id="risk-badge-text">Unknown Risk</span>
+          </div>
+        </div>
+
+        <div id="patterns-container" class="hidden">
+          <h2 class="patterns-header">Detected Patterns</h2>
+          <div class="patterns-list" id="patterns-list"></div>
+        </div>
+
+        <div class="actions" style="margin-top:16px; padding: 0 20px 8px 20px;">
+          <button class="btn btn-primary" id="view-report-btn">
+            View Full Report
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </button>
+        </div>
+
+        <!-- Buttons added for Agent 2 -->
+        <div class="actions-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 0 20px 8px 20px;">
+          <button class="btn" id="btn-share-analysis" style="background: var(--surface-color); border: 1px solid var(--border-color); color: var(--text-primary)">
+            Share Analysis
+          </button>
+          <button class="btn" id="btn-report-false-positive" style="background: var(--surface-color); border: 1px solid var(--border-color); color: var(--text-primary)">
+            False Positive
+          </button>
+        </div>
+
+        <div class="actions" style="padding: 0 20px 8px 20px;">
+          <button class="btn" id="btn-expand-visual" style="background: var(--surface-color); border: 1px solid var(--border-color); color: var(--text-primary)">
+            Expand Visual Analysis
+          </button>
+        </div>
+
+        <div id="visual-analysis-section" class="hidden" style="max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; padding: 0 20px; margin-bottom: 12px;">
+          <div style="border: 1px solid var(--border-color); border-radius: 8px; padding: 12px; background: var(--surface-color);">
+            <p style="font-size: 11px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 8px;">Visual Detection Regions</p>
+            <div id="visual-regions-list" style="font-size: 12px; color: var(--text-secondary);">No visual patterns found to map.</div>
+          </div>
+        </div>
+
+        <div class="actions" style="padding: 0 20px 8px 20px;">
+          <button class="btn btn-primary" id="btn-add-my-flag" style="background: var(--primary); color: white;">
+            Add My Flag
+          </button>
+        </div>
+
+        <!-- Inline form for Add My Flag -->
+        <div id="add-flag-form-container" class="hidden" style="padding: 0 20px 16px 20px;">
+          <form id="form-add-flag" style="border: 1px solid var(--border-color); border-radius: 12px; padding: 12px; background: var(--surface-color); display: flex; flex-direction: column; gap: 8px;">
+            <div>
+              <label style="font-size: 11px; font-weight: 600; color: var(--text-secondary);">PATTERN TYPE</label>
+              <select id="flag-pattern-type" style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid var(--border-color); font-size: 12px; background: var(--bg-color); color: var(--text-primary);">
+                <option value="fee_burial">Fee Burial</option>
+                <option value="auto_renewal_trap">Auto Renewal Trap</option>
+                <option value="urgency_language">Urgency Language</option>
+                <option value="ambiguous_opt_out">Ambiguous Opt Out</option>
+                <option value="misleading_free">Misleading Free</option>
+              </select>
+            </div>
+            <div>
+              <label style="font-size: 11px; font-weight: 600; color: var(--text-secondary);">DESCRIPTION</label>
+              <input type="text" id="flag-description" placeholder="e.g. Hidden subscription fee in checkout" required style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid var(--border-color); font-size: 12px; background: var(--bg-color); color: var(--text-primary);" />
+            </div>
+            <button type="submit" class="btn btn-primary" style="padding: 8px; font-size: 12px;">Submit Flag</button>
+          </form>
+        </div>
+
+        <!-- Toast container for notifications -->
+        <div id="toast-message" class="hidden" style="position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); background: #1E293B; color: #F8FAFC; padding: 8px 16px; border-radius: 20px; font-size: 12px; font-weight: 500; z-index: 1000; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);"></div>
+      </div>
+
+      <div id="not-financial-state" class="state-container hidden">
+        <div class="state-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--low-text)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+        </div>
+        <p class="state-title">Safe Environment</p>
+        <p class="state-desc">Not a financial product page.</p>
+      </div>
+    </main>
+
+    <!-- History View -->
+    <main id="view-history" class="view-section">
+      <h2 class="patterns-header">Recent Scans</h2>
+      <div id="history-loading" class="state-container">
+        <div class="spinner"></div>
+        <p class="state-desc">Loading history...</p>
+      </div>
+      <div id="history-empty" class="state-container hidden">
+        <div class="state-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--text-secondary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+        </div>
+        <p class="state-title">No History</p>
+        <p class="state-desc">Scan history will appear here.</p>
+      </div>
+      <div id="history-list" class="patterns-list hidden" style="padding-top: 10px;">
+        <!-- history rows rendered dynamically -->
+      </div>
+    </main>
+
+    <!-- Settings View -->
+    <main id="view-settings" class="view-section">
+      <h2 class="patterns-header">Preferences</h2>
+      <div style="padding: 0 20px; display: flex; flex-direction: column; gap: 16px;">
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+          <div>
+            <p style="font-size: 13px; font-weight: 600; color: var(--text-primary);">Auto-Scan Pages</p>
+            <p style="font-size: 11px; color: var(--text-secondary);">Scan pages automatically on visit</p>
+          </div>
+          <input type="checkbox" id="setting-auto-scan" style="width: 18px; height: 18px; cursor: pointer;" />
+        </div>
+
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+          <div>
+            <p style="font-size: 13px; font-weight: 600; color: var(--text-primary);">Overlay Notification</p>
+            <p style="font-size: 11px; color: var(--text-secondary);">Show in-page floating shield</p>
+          </div>
+          <input type="checkbox" id="setting-overlay-toggle" style="width: 18px; height: 18px; cursor: pointer;" />
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+          <div>
+            <p style="font-size: 13px; font-weight: 600; color: var(--text-primary);">Risk Alert Threshold</p>
+            <p style="font-size: 11px; color: var(--text-secondary);">Alert only if score exceeds</p>
+          </div>
+          <select id="setting-risk-threshold" style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid var(--border-color); font-size: 12px; background: var(--bg-color); color: var(--text-primary);">
+            <option value="1">1 (Show all)</option>
+            <option value="3">3 (Medium)</option>
+            <option value="5">5 (High)</option>
+            <option value="7">7 (Critical)</option>
+          </select>
+        </div>
+      </div>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+      <button class="nav-item active" data-target="view-home">
+        <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+        Home
+      </button>
+      <button class="nav-item" data-target="view-history">
+        <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+        History
+      </button>
+      <button class="nav-item" data-target="view-settings">
+        <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+        Settings
+      </button>
+    </nav>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
