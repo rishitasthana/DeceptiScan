@@ -1,0 +1,6 @@
+{"text": "Fees may apply as referenced in the internal rate card document.", "labels": [1, 0, 0, 0, 0, 0]}
+{"text": "Your membership continues and renews unless you call to cancel.", "labels": [0, 1, 0, 0, 0, 0]}
+{"text": "Hurry — pre-approval expires in 2 hours. Do not miss this.", "labels": [0, 0, 1, 0, 0, 0]}
+{"text": "You can manage your preferences by reaching our support team via email.", "labels": [0, 0, 0, 1, 0, 0]}
+{"text": "Complimentary service included at no charge to eligible customers.", "labels": [0, 0, 0, 0, 1, 0]}
+{"text": "Transactions are processed within three business days of receipt.", "labels": [0, 0, 0, 0, 0, 1]}
