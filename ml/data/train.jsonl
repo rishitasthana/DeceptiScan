@@ -1,1 +1,411 @@
-{"text": "Your subscription will automatically renew at the end of the promotional period for $99.99 unless canceled within 24 hours.", "labels": [0, 1, 0, 0, 0, 0]}
+{"text": "Failure to complete verification today may result in loss of promotional access.", "labels": [0, 0, 1, 0, 0, 0]}
+{"text": "Get free cashback enrollment upon payment of the convenience fee.", "labels": [0, 0, 0, 0, 1, 0]}
+{"text": "Charges relating to payment reversals are specified only in the referenced pricing booklet.", "labels": [1, 0, 0, 0, 0, 0]}
+{"text": "The applicable convenience fee is described in the Merchant Service Pricing Document.", "labels": [1, 0, 0, 0, 0, 0]}
+{"text": "This special interest rate is available only until midnight today and may not be offered again.", "labels": [0, 0, 1, 0, 0, 0]}
+{"text": "Applicable insurance administration fees are detailed separately in the Policy Fee Appendix.", "labels": [1, 0, 0, 0, 0, 0]}
+{"text": "The Company will provide a clear explanation of claim eligibility criteria.", "labels": [0, 0, 0, 0, 0, 1]}
+{"text": "Limited-time rewards will be withdrawn if enrollment is not completed today.", "labels": [0, 0, 1, 0, 0, 0]}
+{"text": "The renewal mandate shall remain effective for all future automatic renewals unless revoked.", "labels": [0, 1, 0, 0, 0, 0]}
+{"text": "The Bank may determine the appropriate sequence of steps necessary to complete cancellation.", "labels": [0, 0, 0, 1, 0, 0]}
+{"text": "Termination requests will be considered after submission of the necessary documentation, if required.", "labels": [0, 0, 0, 1, 0, 0]}
+{"text": "Enjoy free policy renewal assistance, excluding applicable service fees.", "labels": [0, 0, 0, 0, 1, 0]}
+{"text": "The Bank may specify alternative cancellation procedures depending on the nature of the service.", "labels": [0, 0, 0, 1, 0, 0]}
+{"text": "Termination shall remain subject to successful completion of the Company's verification requirements.", "labels": [0, 0, 0, 1, 0, 0]}
+{"text": "Your subscription shall automatically continue into the next billing period unless cancelled beforehand.", "labels": [0, 1, 0, 0, 0, 0]}
+{"text": "The Customer shall pay administrative expenses described only in Appendix L.", "labels": [1, 0, 0, 0, 0, 0]}
+{"text": "The Customer may terminate recurring instructions through the same channel used for activation.", "labels": [0, 0, 0, 0, 0, 1]}
+{"text": "Termination shall not be effective until the Company communicates successful completion of the process.", "labels": [0, 0, 0, 1, 0, 0]}
+{"text": "The Customer may access these Terms at any time through the official website.", "labels": [0, 0, 0, 0, 0, 1]}
+{"text": "The User may opt out of the service by using the prescribed process available through applicable service channels.", "labels": [0, 0, 0, 1, 0, 0]}
+{"text": "Register now before the limited-time enrollment period closes.", "labels": [0, 0, 1, 0, 0, 0]}
+{"text": "The Company reserves the right to recover technology service fees specified in Appendix M.", "labels": [1, 0, 0, 0, 0, 0]}
+{"text": "The policy subscription will renew automatically each year unless written cancellation is received before expiry.", "labels": [0, 1, 0, 0, 0, 0]}
+{"text": "Your special banking privileges will expire unless activated within the specified timeframe.", "labels": [0, 0, 1, 0, 0, 0]}
+{"text": "Only timely applications will qualify for the current processing fee discount.", "labels": [0, 0, 1, 0, 0, 0]}
+{"text": "The Customer agrees that the plan shall automatically renew until an opt-out request is accepted.", "labels": [0, 1, 0, 0, 0, 0]}
+{"text": "Cancellation shall be processed only after all pending obligations have been reviewed.", "labels": [0, 0, 0, 1, 0, 0]}
+{"text": "Your service package will automatically renew for identical billing periods unless cancelled in advance.", "labels": [0, 1, 0, 0, 0, 0]}
+{"text": "The applicable digital servicing fee shall be determined as per the document referenced in Clause 16.", "labels": [1, 0, 0, 0, 0, 0]}
+{"text": "The processing fee concession is available only for a limited number of days.", "labels": [0, 0, 1, 0, 0, 0]}
+{"text": "The Bank will obtain explicit authorization before enabling recurring billing.", "labels": [0, 0, 0, 0, 0, 1]}
+{"text": "Requests to discontinue the facility must comply with the procedures specified by the Bank.", "labels": [0, 0, 0, 1, 0, 0]}
+{"text": "Get free insurance coverage for the first month upon payment of applicable enrollment fees.", "labels": [0, 0, 0, 0, 1, 0]}
+{"text": "The annual maintenance plan will automatically renew unless cancellation is received before the commencement of the next term.", "labels": [0, 1, 0, 0, 0, 0]}
+{"text": "The Bank reserves the right to determine the appropriate method for processing cancellation requests.", "labels": [0, 0, 0, 1, 0, 0]}
+{"text": "The Customer may discontinue the service by following the applicable cancellation procedure as determined by the Bank from time to time.", "labels": [0, 0, 0, 1, 0, 0]}
+{"text": "The Customer may request a duplicate statement at the fee disclosed in the Schedule of Charges.", "labels": [0, 0, 0, 0, 0, 1]}
+{"text": "This campaign closes soon, and late submissions may not be considered.", "labels": [0, 0, 1, 0, 0, 0]}
+{"text": "Applicable reconciliation charges shall be determined in accordance with Annexure XII.", "labels": [1, 0, 0, 0, 0, 0]}
+{"text": "The Bank may recover courier expenses as detailed in the Service Tariff Book.", "labels": [1, 0, 0, 0, 0, 0]}
+{"text": "This exclusive benefit is reserved for customers who act before the stated deadline.", "labels": [0, 0, 1, 0, 0, 0]}
+{"text": "Immediate action is recommended to prevent loss of the applicable discount.", "labels": [0, 0, 1, 0, 0, 0]}
+{"text": "Cancellation requests shall be processed only after completion of all required administrative formalities.", "labels": [0, 0, 0, 1, 0, 0]}
+{"text": "The service subscription automatically renews until a valid opt-out request has been processed.", "labels": [0, 1, 0, 0, 0, 0]}
+{"text": "Charges are referenced in the internal rate card document.", "labels": [1, 0, 0, 0, 0, 0]}
+{"text": "All premiums and applicable taxes are displayed before policy purchase.", "labels": [0, 0, 0, 0, 0, 1]}
+{"text": "The User should use the prescribed mechanism for opting out as applicable at the relevant time.", "labels": [0, 0, 0, 1, 0, 0]}
+{"text": "No administrative fee will be deducted unless specifically disclosed in advance.", "labels": [0, 0, 0, 0, 0, 1]}
+{"text": "Recurring renewal will remain enabled unless expressly disabled through the account settings.", "labels": [0, 1, 0, 0, 0, 0]}
+{"text": "Customers who postpone acceptance risk losing the advertised benefits.", "labels": [0, 0, 1, 0, 0, 0]}
+{"text": "Enjoy complimentary card insurance upon payment of enrollment charges.", "labels": [0, 0, 0, 0, 1, 0]}
+{"text": "The User may request cancellation through any authorized method recognized by the Company.", "labels": [0, 0, 0, 1, 0, 0]}
+{"text": "This opportunity expires shortly, and delayed applications may not qualify.", "labels": [0, 0, 1, 0, 0, 0]}
+{"text": "Any promotional offer will clearly state its eligibility criteria and validity period.", "labels": [0, 0, 0, 0, 0, 1]}
+{"text": "The subscription shall continue through recurring annual renewals until cancelled in accordance with these Terms.", "labels": [0, 1, 0, 0, 0, 0]}
+{"text": "The subscription may be cancelled in accordance with the procedures communicated by the Company from time to time.", "labels": [0, 0, 0, 1, 0, 0]}
+{"text": "Renewal instructions shall be deemed accepted unless the User submits a cancellation request before the renewal deadline.", "labels": [0, 1, 0, 0, 0, 0]}
+{"text": "Complete your application immediately to avoid forfeiting the introductory pricing.", "labels": [0, 0, 1, 0, 0, 0]}
+{"text": "Cancellation shall be effective only after the Bank confirms successful completion of the applicable process.", "labels": [0, 0, 0, 1, 0, 0]}
+{"text": "The Company will send a renewal reminder at least 15 days before the policy expiry date.", "labels": [0, 0, 0, 0, 0, 1]}
+{"text": "Automatic renewal shall occur at the end of every subscription term unless the Customer opts out.", "labels": [0, 1, 0, 0, 0, 0]}
+{"text": "Fees for additional authentication services are governed by the Digital Services Pricing Guide.", "labels": [1, 0, 0, 0, 0, 0]}
+{"text": "Membership shall automatically continue at the end of each term unless cancelled before the renewal window closes.", "labels": [0, 1, 0, 0, 0, 0]}
+{"text": "Free investment account opening is available, excluding verification expenses.", "labels": [0, 0, 0, 0, 1, 0]}
+{"text": "No recurring charges will be deducted after a valid cancellation request has been processed.", "labels": [0, 0, 0, 0, 0, 1]}
+{"text": "Customers who fail to respond before expiry may lose access to this exclusive plan.", "labels": [0, 0, 1, 0, 0, 0]}
+{"text": "The Company will process cancellation requests in accordance with its prevailing operating practices.", "labels": [0, 0, 0, 1, 0, 0]}
+{"text": "The Company will treat the absence of cancellation as authorization for automatic renewal.", "labels": [0, 1, 0, 0, 0, 0]}
+{"text": "The Customer may withdraw from the service by following the prescribed process as applicable from time to time.", "labels": [0, 0, 0, 1, 0, 0]}
+{"text": "Customers may review the consequences of cancellation before submitting a request.", "labels": [0, 0, 0, 0, 0, 1]}
+{"text": "The Company will automatically renew the policy add-on and collect the applicable premium unless opted out.", "labels": [0, 1, 0, 0, 0, 0]}
+{"text": "The Bank will issue a receipt for every fee collected from the Customer.", "labels": [0, 0, 0, 0, 0, 1]}
+{"text": "Unless expressly terminated by the User, the subscription will renew automatically and the applicable charges will be debited from the registered payment method.", "labels": [0, 1, 0, 0, 0, 0]}
+{"text": "The service plan will renew automatically upon expiry, and the renewal premium will be collected through the registered payment mandate.", "labels": [0, 1, 0, 0, 0, 0]}
+{"text": "The User may discontinue participation by complying with the applicable cancellation requirements.", "labels": [0, 0, 0, 1, 0, 0]}
+{"text": "Receive complimentary loan servicing, subject to administrative fees.", "labels": [0, 0, 0, 0, 1, 0]}
+{"text": "Card replacement fees shall be as prescribed in the document titled Schedule of Banking Charges.", "labels": [1, 0, 0, 0, 0, 0]}
+{"text": "Cancellation may involve additional procedural steps depending on operational requirements.", "labels": [0, 0, 0, 1, 0, 0]}
+{"text": "Applicable claim processing charges shall be governed by the Claims Fee Appendix.", "labels": [1, 0, 0, 0, 0, 0]}
+{"text": "Enjoy free UPI registration, excluding verification and authentication charges.", "labels": [0, 0, 0, 0, 1, 0]}
+{"text": "The Company will refund eligible amounts in accordance with the published refund policy.", "labels": [0, 0, 0, 0, 0, 1]}
+{"text": "The Customer must satisfy all applicable conditions before any cancellation request can be processed.", "labels": [0, 0, 0, 1, 0, 0]}
+{"text": "The Company may recover policy servicing expenses as described in Appendix K.", "labels": [1, 0, 0, 0, 0, 0]}
+{"text": "Automatic renewal shall occur regardless of whether the service has been actively used during the previous term.", "labels": [0, 1, 0, 0, 0, 0]}
+{"text": "The Customer may review all applicable taxes before confirming payment.", "labels": [0, 0, 0, 0, 0, 1]}
+{"text": "Get free transaction notifications after payment of messaging fees.", "labels": [0, 0, 0, 0, 1, 0]}
+{"text": "The Customer may withdraw consent for recurring payments at any time through the registered payment method.", "labels": [0, 0, 0, 0, 0, 1]}
+{"text": "Customers may contact customer support to clarify any provision of these Terms before acceptance.", "labels": [0, 0, 0, 0, 0, 1]}
+{"text": "The promotional offer is ending soon, and no extensions are anticipated.", "labels": [0, 0, 1, 0, 0, 0]}
+{"text": "Customers may download a complete copy of these Terms and the fee schedule at any time.", "labels": [0, 0, 0, 0, 0, 1]}
+{"text": "Transaction charges, if any, will apply in accordance with the fee schedule incorporated by reference into these Terms.", "labels": [1, 0, 0, 0, 0, 0]}
+{"text": "Apply before the countdown ends to remain eligible for the special cashback.", "labels": [0, 0, 1, 0, 0, 0]}
+{"text": "The Bank will clearly indicate whether a service is complimentary or chargeable.", "labels": [0, 0, 0, 0, 0, 1]}
+{"text": "Enjoy a free virtual card, excluding applicable issuance and maintenance charges.", "labels": [0, 0, 0, 0, 1, 0]}
+{"text": "The User shall bear all applicable facilitation fees listed in the supplemental pricing document.", "labels": [1, 0, 0, 0, 0, 0]}
+{"text": "Any changes to subscription pricing will be communicated before the next billing cycle.", "labels": [0, 0, 0, 0, 0, 1]}
+{"text": "Your account shall remain enrolled through automatic renewals unless terminated in accordance with these Terms.", "labels": [0, 1, 0, 0, 0, 0]}
+{"text": "Discontinuation of the service shall be subject to applicable internal procedures.", "labels": [0, 0, 0, 1, 0, 0]}
+{"text": "Enjoy free policy endorsement, excluding administrative processing fees.", "labels": [0, 0, 0, 0, 1, 0]}
+{"text": "This offer is valid only for the first customers who complete registration before the deadline.", "labels": [0, 0, 1, 0, 0, 0]}
+{"text": "The complimentary banking package excludes mandatory annual service charges.", "labels": [0, 0, 0, 0, 1, 0]}
+{"text": "Customers may request clarification regarding any fee before completing enrollment.", "labels": [0, 0, 0, 0, 0, 1]}
+{"text": "Failure to act within the specified timeframe may result in permanent loss of this offer.", "labels": [0, 0, 1, 0, 0, 0]}
+{"text": "The subscription will automatically renew at the prevailing rates unless cancelled before the next billing date.", "labels": [0, 1, 0, 0, 0, 0]}
+{"text": "Your chance to receive the introductory benefits expires at the end of the day.", "labels": [0, 0, 1, 0, 0, 0]}
+{"text": "The Bank will inform Customers if a transaction cannot be completed successfully.", "labels": [0, 0, 0, 0, 0, 1]}
+{"text": "All applicable fees are listed in the Schedule of Charges provided with this agreement.", "labels": [0, 0, 0, 0, 0, 1]}
+{"text": "The free wallet upgrade excludes applicable platform fees.", "labels": [0, 0, 0, 0, 1, 0]}
+{"text": "Apply now, as the limited-time processing fee waiver expires today.", "labels": [0, 0, 1, 0, 0, 0]}
+{"text": "Cancellation may be permitted subject to completion of the required formalities in a manner acceptable to the Bank.", "labels": [0, 0, 0, 1, 0, 0]}
+{"text": "This exclusive renewal benefit is available only if accepted before expiry.", "labels": [0, 0, 1, 0, 0, 0]}
+{"text": "The Customer may opt out by following the applicable process communicated by customer support.", "labels": [0, 0, 0, 1, 0, 0]}
+{"text": "Avail a free loan eligibility check, subject to verification service charges.", "labels": [0, 0, 0, 0, 1, 0]}
+{"text": "Requests for cancellation shall be accepted only upon fulfillment of all applicable procedural requirements.", "labels": [0, 0, 0, 1, 0, 0]}
+{"text": "Enjoy free premium reminders, subject to notification service charges.", "labels": [0, 0, 0, 0, 1, 0]}
+{"text": "The Customer's request to terminate shall be subject to successful internal processing.", "labels": [0, 0, 0, 1, 0, 0]}
+{"text": "Enjoy free account setup, excluding documentation, verification and compliance charges.", "labels": [0, 0, 0, 0, 1, 0]}
+{"text": "Act now to secure the current premium before revised rates become applicable.", "labels": [0, 0, 1, 0, 0, 0]}
+{"text": "Claim your free reward membership by paying the applicable enrollment fee.", "labels": [0, 0, 0, 0, 1, 0]}
+{"text": "The free account upgrade is subject to administrative charges.", "labels": [0, 0, 0, 0, 1, 0]}
+{"text": "The Company may require additional confirmation before processing any request to terminate the subscription.", "labels": [0, 0, 0, 1, 0, 0]}
+{"text": "The Customer may exit the subscription using the process communicated through official service channels.", "labels": [0, 0, 0, 1, 0, 0]}
+{"text": "The Company may accept cancellation requests only through approved service channels.", "labels": [0, 0, 0, 1, 0, 0]}
+{"text": "The applicable processing fee shall be as stated in the fee schedule available on the Bank's portal.", "labels": [1, 0, 0, 0, 0, 0]}
+{"text": "The annual subscription will renew automatically even if reminder communications are not acknowledged.", "labels": [0, 1, 0, 0, 0, 0]}
+{"text": "The Bank reserves the right to process automatic renewals unless valid cancellation instructions are received.", "labels": [0, 1, 0, 0, 0, 0]}
+{"text": "The subscription fee shall be charged automatically upon each renewal unless cancellation is completed prior to billing.", "labels": [0, 1, 0, 0, 0, 0]}
+{"text": "Charges for expedited processing shall be as specified in the referenced Schedule of Service Charges.", "labels": [1, 0, 0, 0, 0, 0]}
+{"text": "Respond now to avoid losing eligibility for the complimentary coverage.", "labels": [0, 0, 1, 0, 0, 0]}
+{"text": "Failure to confirm immediately may result in cancellation of the exclusive offer.", "labels": [0, 0, 1, 0, 0, 0]}
+{"text": "Customers should finalize registration at the earliest to secure promotional pricing.", "labels": [0, 0, 1, 0, 0, 0]}
+{"text": "Receive free policy servicing, subject to administrative expenses.", "labels": [0, 0, 0, 0, 1, 0]}
+{"text": "Charges for duplicate statements shall be governed by the Service Pricing Circular available separately.", "labels": [1, 0, 0, 0, 0, 0]}
+{"text": "The free card replacement offer excludes courier and handling charges.", "labels": [0, 0, 0, 0, 1, 0]}
+{"text": "The applicable processing fee is displayed prominently during the application process.", "labels": [0, 0, 0, 0, 0, 1]}
+{"text": "Receive complimentary account monitoring, subject to monthly service charges.", "labels": [0, 0, 0, 0, 1, 0]}
+{"text": "Discontinuation of the subscription may require additional confirmation before becoming effective.", "labels": [0, 0, 0, 1, 0, 0]}
+{"text": "Receive a free welcome benefit upon payment of activation charges.", "labels": [0, 0, 0, 0, 1, 0]}
+{"text": "Complete your enrollment within 24 hours to avoid losing access to this exclusive offer.", "labels": [0, 0, 1, 0, 0, 0]}
+{"text": "Receive free account statements, although retrieval and delivery fees may apply.", "labels": [0, 0, 0, 0, 1, 0]}
+{"text": "Free customer support is available, although premium assistance charges may apply.", "labels": [0, 0, 0, 0, 1, 0]}
+{"text": "Cancellation requests shall be accepted through designated channels as determined by the Bank.", "labels": [0, 0, 0, 1, 0, 0]}
+{"text": "No cancellation fee will be charged if the service is terminated before the next billing cycle.", "labels": [0, 0, 0, 0, 0, 1]}
+{"text": "The recurring membership shall automatically extend for additional terms unless cancelled before renewal.", "labels": [0, 1, 0, 0, 0, 0]}
+{"text": "Cancellation shall be completed once the Company is satisfied that all applicable requirements have been met.", "labels": [0, 0, 0, 1, 0, 0]}
+{"text": "The Bank will clearly distinguish mandatory services from optional add-on features.", "labels": [0, 0, 0, 0, 0, 1]}
+{"text": "Free account closure is available, subject to settlement processing charges.", "labels": [0, 0, 0, 0, 1, 0]}
+{"text": "Applicable branch-assisted transaction charges shall be determined by the Bank's Schedule of Charges.", "labels": [1, 0, 0, 0, 0, 0]}
+{"text": "The applicable interest rate is clearly stated in the loan agreement and remains fixed for the agreed tenure.", "labels": [0, 0, 0, 0, 0, 1]}
+{"text": "Enjoy complimentary card personalization, subject to customization fees.", "labels": [0, 0, 0, 0, 1, 0]}
+{"text": "Cancellation instructions are available on the Company's website and mobile application.", "labels": [0, 0, 0, 0, 0, 1]}
+{"text": "The Company will acknowledge receipt of every cancellation request by email or SMS.", "labels": [0, 0, 0, 0, 0, 1]}
+{"text": "Your invitation to join this program expires within the next 48 hours.", "labels": [0, 0, 1, 0, 0, 0]}
+{"text": "Failure to act promptly may result in higher applicable charges.", "labels": [0, 0, 1, 0, 0, 0]}
+{"text": "Enjoy free digital onboarding, subject to identity verification charges.", "labels": [0, 0, 0, 0, 1, 0]}
+{"text": "The Company reserves the right to specify the mode through which cancellation requests may be submitted.", "labels": [0, 0, 0, 1, 0, 0]}
+{"text": "The Customer shall pay all applicable authentication fees mentioned in Appendix H.", "labels": [1, 0, 0, 0, 0, 0]}
+{"text": "Requests for cancellation shall be processed after verification in accordance with applicable procedures.", "labels": [0, 0, 0, 1, 0, 0]}
+{"text": "The subscription will not renew automatically unless the Customer provides explicit consent.", "labels": [0, 0, 0, 0, 0, 1]}
+{"text": "The User's enrollment will continue through recurring automatic renewals unless explicitly terminated.", "labels": [0, 1, 0, 0, 0, 0]}
+{"text": "Respond without delay to ensure continued access to preferential account features.", "labels": [0, 0, 1, 0, 0, 0]}
+{"text": "The discounted service fee is valid only until the end of the current business day.", "labels": [0, 0, 1, 0, 0, 0]}
+{"text": "Any convenience fee, where applicable, shall be determined in accordance with the tariff sheet referenced in Section 9.", "labels": [1, 0, 0, 0, 0, 0]}
+{"text": "Complete payment now to preserve your eligibility for the promotional incentive.", "labels": [0, 0, 1, 0, 0, 0]}
+{"text": "Delay in activation could result in forfeiture of the promotional rewards.", "labels": [0, 0, 1, 0, 0, 0]}
+{"text": "No fee shall be collected unless it has been disclosed before the Customer provides consent.", "labels": [0, 0, 0, 0, 0, 1]}
+{"text": "The current promotional premium will no longer be available after today.", "labels": [0, 0, 1, 0, 0, 0]}
+{"text": "Termination shall be processed subject to successful completion of all required verification steps.", "labels": [0, 0, 0, 1, 0, 0]}
+{"text": "The Customer will receive an itemized statement of all fees deducted from the account.", "labels": [0, 0, 0, 0, 0, 1]}
+{"text": "The Customer may review all applicable terms before accepting any promotional offer.", "labels": [0, 0, 0, 0, 0, 1]}
+{"text": "Termination requests may require manual review before becoming effective.", "labels": [0, 0, 0, 1, 0, 0]}
+{"text": "The protection plan shall continue automatically upon expiry unless the Customer submits a cancellation request prior to the renewal cycle.", "labels": [0, 1, 0, 0, 0, 0]}
+{"text": "Termination may require additional documentation where deemed necessary by the Company.", "labels": [0, 0, 0, 1, 0, 0]}
+{"text": "The User may discontinue the service by following the relevant instructions provided upon request.", "labels": [0, 0, 0, 1, 0, 0]}
+{"text": "Your recurring plan will continue indefinitely through automatic renewals until you opt out.", "labels": [0, 1, 0, 0, 0, 0]}
+{"text": "Charges for loan statement generation shall be governed by the Banking Tariff Schedule.", "labels": [1, 0, 0, 0, 0, 0]}
+{"text": "Applicable service upgrade charges shall be governed by the Pricing Supplement.", "labels": [1, 0, 0, 0, 0, 0]}
+{"text": "The free rewards program excludes annual participation charges.", "labels": [0, 0, 0, 0, 1, 0]}
+{"text": "The introductory offer is available for a limited period and may end without extension.", "labels": [0, 0, 1, 0, 0, 0]}
+{"text": "Applicable account migration fees are governed by the Pricing Framework referred to in Clause 21.", "labels": [1, 0, 0, 0, 0, 0]}
+{"text": "The Bank will provide at least 30 days' prior notice before revising any applicable charges.", "labels": [0, 0, 0, 0, 0, 1]}
+{"text": "This limited-period offer cannot be guaranteed after the stated validity date.", "labels": [0, 0, 1, 0, 0, 0]}
+{"text": "Customers are free to decline optional products without affecting core banking services.", "labels": [0, 0, 0, 0, 0, 1]}
+{"text": "The User agrees that renewal charges may be collected automatically at each renewal interval.", "labels": [0, 1, 0, 0, 0, 0]}
+{"text": "Receive free premium collection services, excluding transaction charges.", "labels": [0, 0, 0, 0, 1, 0]}
+{"text": "The User authorizes the Company to renew the service automatically on each anniversary date.", "labels": [0, 1, 0, 0, 0, 0]}
+{"text": "Limited enrollment slots remain, so prompt acceptance is strongly recommended.", "labels": [0, 0, 1, 0, 0, 0]}
+{"text": "Requests for discontinuation shall be processed through the designated department in accordance with internal guidelines.", "labels": [0, 0, 0, 1, 0, 0]}
+{"text": "The Customer may opt out of marketing communications at any time without affecting account services.", "labels": [0, 0, 0, 0, 0, 1]}
+{"text": "The Company will provide a detailed premium breakup before policy issuance.", "labels": [0, 0, 0, 0, 0, 1]}
+{"text": "The plan shall automatically renew upon expiry using the existing payment authorization.", "labels": [0, 1, 0, 0, 0, 0]}
+{"text": "The User agrees to pay all fees mentioned in the Merchant Pricing Addendum incorporated by reference.", "labels": [1, 0, 0, 0, 0, 0]}
+{"text": "Act today to ensure uninterrupted access to premium account features.", "labels": [0, 0, 1, 0, 0, 0]}
+{"text": "Only customers who enroll before the deadline will receive the promotional interest rate.", "labels": [0, 0, 1, 0, 0, 0]}
+{"text": "Your enrollment shall automatically continue for the next subscription period unless terminated in accordance with these Terms.", "labels": [0, 1, 0, 0, 0, 0]}
+{"text": "Receive a complimentary insurance rider by paying the applicable policy administration fee.", "labels": [0, 0, 0, 0, 1, 0]}
+{"text": "Failure to cancel before the renewal date shall constitute consent for automatic renewal.", "labels": [0, 1, 0, 0, 0, 0]}
+{"text": "By enrolling in this service, you authorize automatic renewal until you opt out through the prescribed process.", "labels": [0, 1, 0, 0, 0, 0]}
+{"text": "Free loan documentation support is available, subject to file handling fees.", "labels": [0, 0, 0, 0, 1, 0]}
+{"text": "Renewal of the policy requires the Customer's affirmative confirmation before any premium is collected.", "labels": [0, 0, 0, 0, 0, 1]}
+{"text": "Applications received after the deadline will not qualify for promotional terms.", "labels": [0, 0, 1, 0, 0, 0]}
+{"text": "The promotional cashback will expire unless you complete activation within the next 12 hours.", "labels": [0, 0, 1, 0, 0, 0]}
+{"text": "The complimentary wallet service is free, except for activation and maintenance fees.", "labels": [0, 0, 0, 0, 1, 0]}
+{"text": "Complete your purchase today before the promotional pricing is withdrawn.", "labels": [0, 0, 1, 0, 0, 0]}
+{"text": "The Company may require additional authentication before honoring a cancellation request.", "labels": [0, 0, 0, 1, 0, 0]}
+{"text": "The Company may levy documentation charges in accordance with Appendix E.", "labels": [1, 0, 0, 0, 0, 0]}
+{"text": "The free insurance benefit excludes policy servicing fees.", "labels": [0, 0, 0, 0, 1, 0]}
+{"text": "The Company will clearly disclose the duration of every promotional campaign.", "labels": [0, 0, 0, 0, 0, 1]}
+{"text": "The Bank will provide accessible contact details for customer grievances.", "labels": [0, 0, 0, 0, 0, 1]}
+{"text": "Interest calculations shall be performed in accordance with the methodology disclosed in the loan agreement.", "labels": [0, 0, 0, 0, 0, 1]}
+{"text": "Confirm your participation now to avoid losing this limited-period advantage.", "labels": [0, 0, 1, 0, 0, 0]}
+{"text": "The complimentary policy review excludes advisory service charges.", "labels": [0, 0, 0, 0, 1, 0]}
+{"text": "The Company will notify Customers promptly in the event of any security incident affecting their account.", "labels": [0, 0, 0, 0, 0, 1]}
+{"text": "Unless the Customer opts out before the renewal date, the facility shall continue for an additional term automatically.", "labels": [0, 1, 0, 0, 0, 0]}
+{"text": "The free annual financial summary excludes report preparation charges.", "labels": [0, 0, 0, 0, 1, 0]}
+{"text": "The User may request termination by contacting the appropriate support channel designated by the Company.", "labels": [0, 0, 0, 1, 0, 0]}
+{"text": "Free digital wallet access is offered, subject to monthly platform fees.", "labels": [0, 0, 0, 0, 1, 0]}
+{"text": "Cancellation requests shall be reviewed and processed subject to applicable procedural requirements.", "labels": [0, 0, 0, 1, 0, 0]}
+{"text": "The Customer may close the account at any time without any account closure charges.", "labels": [0, 0, 0, 0, 0, 1]}
+{"text": "Applicable ECS return charges shall be governed by the document referenced in Clause 10.5.", "labels": [1, 0, 0, 0, 0, 0]}
+{"text": "Charges for failed auto-debit attempts shall be those contained in the separate Schedule of Fees.", "labels": [1, 0, 0, 0, 0, 0]}
+{"text": "The subscription shall automatically renew using the existing payment authorization unless cancelled.", "labels": [0, 1, 0, 0, 0, 0]}
+{"text": "Only immediate acceptance will ensure access to the advertised promotional features.", "labels": [0, 0, 1, 0, 0, 0]}
+{"text": "Cancellation shall become effective only after the Company completes the necessary verification procedures.", "labels": [0, 0, 0, 1, 0, 0]}
+{"text": "The applicable opt-out process shall be determined by the Bank and may change without prior notice.", "labels": [0, 0, 0, 1, 0, 0]}
+{"text": "Free policy issuance is available, although applicable processing charges remain payable.", "labels": [0, 0, 0, 0, 1, 0]}
+{"text": "The Bank will confirm successful closure of the account in writing.", "labels": [0, 0, 0, 0, 0, 1]}
+{"text": "Your account will be billed automatically for each renewal period unless cancellation is completed before the next billing cycle.", "labels": [0, 1, 0, 0, 0, 0]}
+{"text": "The User agrees that all applicable platform charges shall be those described in the Pricing Compendium referred to under Clause 24.", "labels": [1, 0, 0, 0, 0, 0]}
+{"text": "This exclusive financial plan is available only for a short duration.", "labels": [0, 0, 1, 0, 0, 0]}
+{"text": "Customers may cancel the service at any time through the mobile application, internet banking, or customer care.", "labels": [0, 0, 0, 0, 0, 1]}
+{"text": "Enjoy free online banking registration, excluding authentication service fees.", "labels": [0, 0, 0, 0, 1, 0]}
+{"text": "The Company reserves the right to seek clarification before processing any termination request.", "labels": [0, 0, 0, 1, 0, 0]}
+{"text": "Your membership will automatically renew for successive annual terms unless cancelled at least 30 days before the renewal date.", "labels": [0, 1, 0, 0, 0, 0]}
+{"text": "Unless cancelled in advance, each subscription term will automatically renew under the prevailing pricing.", "labels": [0, 1, 0, 0, 0, 0]}
+{"text": "Charges for account certification requests shall be governed by the fee schedule incorporated by reference.", "labels": [1, 0, 0, 0, 0, 0]}
+{"text": "Get free online statements, excluding archival retrieval fees.", "labels": [0, 0, 0, 0, 1, 0]}
+{"text": "Charges for account portability shall be governed by the tariff document published separately.", "labels": [1, 0, 0, 0, 0, 0]}
+{"text": "The Company will not charge for services that have not been expressly accepted by the Customer.", "labels": [0, 0, 0, 0, 0, 1]}
+{"text": "The Company may recover platform usage fees in accordance with Annexure IV without further notice.", "labels": [1, 0, 0, 0, 0, 0]}
+{"text": "Enjoy free beneficiary registration, excluding authentication charges.", "labels": [0, 0, 0, 0, 1, 0]}
+{"text": "Applicable account conversion charges are listed in the Service Fee Addendum.", "labels": [1, 0, 0, 0, 0, 0]}
+{"text": "Applicable mandate modification fees shall be determined in accordance with the referenced fee schedule.", "labels": [1, 0, 0, 0, 0, 0]}
+{"text": "The Bank may defer cancellation until all required procedural checks have been completed.", "labels": [0, 0, 0, 1, 0, 0]}
+{"text": "Service fees for international transactions shall be those mentioned in the Foreign Services Pricing Guide.", "labels": [1, 0, 0, 0, 0, 0]}
+{"text": "The special rewards campaign ends today, so prompt participation is encouraged.", "labels": [0, 0, 1, 0, 0, 0]}
+{"text": "Free account activation is available upon payment of processing fees.", "labels": [0, 0, 0, 0, 1, 0]}
+{"text": "Customers wishing to opt out should refer to the applicable cancellation instructions available upon request.", "labels": [0, 0, 0, 1, 0, 0]}
+{"text": "Applicable underwriting fees are detailed only in Annexure VIII.", "labels": [1, 0, 0, 0, 0, 0]}
+{"text": "Free nominee registration is available upon payment of documentation charges.", "labels": [0, 0, 0, 0, 1, 0]}
+{"text": "Applicable mandate registration charges shall be governed by the pricing schedule referenced in Clause 8.4.", "labels": [1, 0, 0, 0, 0, 0]}
+{"text": "Delay in completing registration may result in the withdrawal of this promotional offer.", "labels": [0, 0, 1, 0, 0, 0]}
+{"text": "Any cash handling charges shall be applicable as described in the referenced pricing schedule.", "labels": [1, 0, 0, 0, 0, 0]}
+{"text": "Automatic renewal will occur at every billing interval unless the Customer opts out before the next renewal.", "labels": [0, 1, 0, 0, 0, 0]}
+{"text": "Customers must respond before the stated deadline to retain eligibility.", "labels": [0, 0, 1, 0, 0, 0]}
+{"text": "Cancellation may be initiated using the prescribed procedure available through official communication channels.", "labels": [0, 0, 0, 1, 0, 0]}
+{"text": "The applicable annual fee is disclosed before the card is issued.", "labels": [0, 0, 0, 0, 0, 1]}
+{"text": "The User acknowledges that verification service charges are detailed in Appendix J.", "labels": [1, 0, 0, 0, 0, 0]}
+{"text": "No enrollment shall occur unless the Customer actively agrees to participate.", "labels": [0, 0, 0, 0, 0, 1]}
+{"text": "Today's promotional rate cannot be guaranteed for future applications.", "labels": [0, 0, 1, 0, 0, 0]}
+{"text": "Do not delay your acceptance, as the applicable benefits may expire at any time.", "labels": [0, 0, 1, 0, 0, 0]}
+{"text": "The Bank will notify the Customer whenever a recurring payment mandate is created or cancelled.", "labels": [0, 0, 0, 0, 0, 1]}
+{"text": "Unless terminated, the membership will renew automatically for consecutive billing periods.", "labels": [0, 1, 0, 0, 0, 0]}
+{"text": "The registered payment method shall be used automatically for future renewal charges unless revoked.", "labels": [0, 1, 0, 0, 0, 0]}
+{"text": "The service may be cancelled after completion of the prescribed procedural formalities.", "labels": [0, 0, 0, 1, 0, 0]}
+{"text": "The subscription may be discontinued upon completion of the formal exit procedure prescribed by the Company.", "labels": [0, 0, 0, 1, 0, 0]}
+{"text": "The applicable cancellation mechanism shall be determined by the Company at its discretion.", "labels": [0, 0, 0, 1, 0, 0]}
+{"text": "Customers may compare available account variants before selecting a banking product.", "labels": [0, 0, 0, 0, 0, 1]}
+{"text": "Get free document storage, subject to digital maintenance charges.", "labels": [0, 0, 0, 0, 1, 0]}
+{"text": "The Customer may update or remove payment methods through the account settings.", "labels": [0, 0, 0, 0, 0, 1]}
+{"text": "Submit your consent now to retain access to these limited-time benefits.", "labels": [0, 0, 1, 0, 0, 0]}
+{"text": "All optional insurance benefits require separate acceptance by the Customer.", "labels": [0, 0, 0, 0, 0, 1]}
+{"text": "Charges applicable to dormant accounts are described in the Bank's Master Schedule of Charges.", "labels": [1, 0, 0, 0, 0, 0]}
+{"text": "Applicable onboarding fees shall be as specified in the Pricing Disclosure referred to in Clause 5.7.", "labels": [1, 0, 0, 0, 0, 0]}
+{"text": "The Company reserves the right to revise the opt-out process without prior intimation.", "labels": [0, 0, 0, 1, 0, 0]}
+{"text": "Cancellation may be delayed pending completion of the required verification process.", "labels": [0, 0, 0, 1, 0, 0]}
+{"text": "Applicable policy reinstatement fees are detailed only in Annexure XIII.", "labels": [1, 0, 0, 0, 0, 0]}
+{"text": "Applicable settlement charges shall be those contained in the Merchant Tariff Annexure.", "labels": [1, 0, 0, 0, 0, 0]}
+{"text": "The service may be discontinued without penalty by providing notice through any official banking channel.", "labels": [0, 0, 0, 0, 0, 1]}
+{"text": "The opportunity to lock in today's rate ends shortly.", "labels": [0, 0, 1, 0, 0, 0]}
+{"text": "Account closure charges, where applicable, are specified only in the tariff annexure accompanying these Terms.", "labels": [1, 0, 0, 0, 0, 0]}
+{"text": "The subscription shall remain in force and renew automatically at the prevailing rates unless cancelled in advance.", "labels": [0, 1, 0, 0, 0, 0]}
+{"text": "Subscription charges will continue to be collected automatically until the plan is cancelled.", "labels": [0, 1, 0, 0, 0, 0]}
+{"text": "The Company will provide customer support during the published business hours.", "labels": [0, 0, 0, 0, 0, 1]}
+{"text": "Customers wishing to discontinue the plan should follow the applicable exit process as notified periodically.", "labels": [0, 0, 0, 1, 0, 0]}
+{"text": "The Customer should contact the Company to obtain details regarding the current cancellation process.", "labels": [0, 0, 0, 1, 0, 0]}
+{"text": "The premium shall be automatically debited for each renewal unless the mandate is revoked before the due date.", "labels": [0, 1, 0, 0, 0, 0]}
+{"text": "All collection-related charges shall be governed by the Recovery Fee Schedule published by the Company.", "labels": [1, 0, 0, 0, 0, 0]}
+{"text": "Automatic renewal shall apply by default upon completion of the initial subscription period.", "labels": [0, 1, 0, 0, 0, 0]}
+{"text": "Charges relating to account maintenance shall be governed by the Bank's Schedule of Charges available separately on the website.", "labels": [1, 0, 0, 0, 0, 0]}
+{"text": "Your membership will remain active through automatic renewals unless terminated before the next billing cycle.", "labels": [0, 1, 0, 0, 0, 0]}
+{"text": "Termination of the service may require additional steps as communicated by customer support.", "labels": [0, 0, 0, 1, 0, 0]}
+{"text": "The Customer's payment mandate shall remain active for all future automatic subscription renewals.", "labels": [0, 1, 0, 0, 0, 0]}
+{"text": "The User shall be liable for platform maintenance fees specified only in the Pricing Annex.", "labels": [1, 0, 0, 0, 0, 0]}
+{"text": "Renewal processing fees shall be payable as described in Appendix III forming part of these Terms.", "labels": [1, 0, 0, 0, 0, 0]}
+{"text": "Your subscription will continue without interruption through automatic renewal unless cancelled in advance.", "labels": [0, 1, 0, 0, 0, 0]}
+{"text": "All remittance-related charges shall be those described in the Foreign Exchange Tariff Book published separately.", "labels": [1, 0, 0, 0, 0, 0]}
+{"text": "Unless instructed otherwise, your plan will be renewed automatically using the registered payment instrument.", "labels": [0, 1, 0, 0, 0, 0]}
+{"text": "Cancellation requests shall be handled in accordance with the Company's prevailing internal procedures.", "labels": [0, 0, 0, 1, 0, 0]}
+{"text": "Receive complimentary banking assistance, subject to premium support charges.", "labels": [0, 0, 0, 0, 1, 0]}
+{"text": "The current offer will expire shortly and may not be repeated in the future.", "labels": [0, 0, 1, 0, 0, 0]}
+{"text": "This limited-duration benefit will expire automatically unless accepted promptly.", "labels": [0, 0, 1, 0, 0, 0]}
+{"text": "The service package shall renew automatically each month unless the User disables recurring billing.", "labels": [0, 1, 0, 0, 0, 0]}
+{"text": "The policy add-on will be renewed automatically each year unless the Company receives written notice of cancellation before the renewal date.", "labels": [0, 1, 0, 0, 0, 0]}
+{"text": "Enjoy free reward redemption, excluding fulfillment and logistics charges.", "labels": [0, 0, 0, 0, 1, 0]}
+{"text": "The free EMI conversion offer excludes applicable processing charges.", "labels": [0, 0, 0, 0, 1, 0]}
+{"text": "The Customer's personal information will be handled in accordance with the published privacy policy.", "labels": [0, 0, 0, 0, 0, 1]}
+{"text": "The policy benefit shall continue through automatic annual renewals unless cancelled before the due date.", "labels": [0, 1, 0, 0, 0, 0]}
+{"text": "The Bank will provide advance notice if any service becomes unavailable due to maintenance.", "labels": [0, 0, 0, 0, 0, 1]}
+{"text": "Your subscription renews automatically unless cancelled 30 days prior.", "labels": [0, 1, 0, 0, 0, 0]}
+{"text": "The free account maintenance offer excludes regulatory and compliance fees.", "labels": [0, 0, 0, 0, 1, 0]}
+{"text": "By accepting these Terms, you consent to automatic renewal of the subscription unless cancelled beforehand.", "labels": [0, 1, 0, 0, 0, 0]}
+{"text": "Enjoy complimentary claim assistance, subject to claim processing fees.", "labels": [0, 0, 0, 0, 1, 0]}
+{"text": "Receive complimentary investment recommendations after payment of subscription charges.", "labels": [0, 0, 0, 0, 1, 0]}
+{"text": "Applicable payment gateway fees are specified in the Merchant Pricing Terms referenced herein.", "labels": [1, 0, 0, 0, 0, 0]}
+{"text": "Get a free financial wellness report after paying the report generation fee.", "labels": [0, 0, 0, 0, 1, 0]}
+{"text": "This exclusive membership benefit is available only until the end of the offer period.", "labels": [0, 0, 1, 0, 0, 0]}
+{"text": "The Customer may discontinue value-added services without closing the primary account.", "labels": [0, 0, 0, 0, 0, 1]}
+{"text": "Charges for cheque collection services shall be determined by the tariff schedule incorporated herein by reference.", "labels": [1, 0, 0, 0, 0, 0]}
+{"text": "Processing fees for loan restructuring shall be those listed in the supplemental pricing appendix.", "labels": [1, 0, 0, 0, 0, 0]}
+{"text": "The Customer agrees to pay inspection charges specified under the supplemental fee schedule.", "labels": [1, 0, 0, 0, 0, 0]}
+{"text": "The User authorizes recurring renewals and associated charges until cancellation is successfully completed.", "labels": [0, 1, 0, 0, 0, 0]}
+{"text": "The Company may automatically renew your subscription and collect the applicable renewal amount from your linked account.", "labels": [0, 1, 0, 0, 0, 0]}
+{"text": "The current reward structure may change without notice after the offer period ends.", "labels": [0, 0, 1, 0, 0, 0]}
+{"text": "Enjoy a free debit card, subject to applicable annual maintenance charges after issuance.", "labels": [0, 0, 0, 0, 1, 0]}
+{"text": "The free savings account includes applicable maintenance fees after activation.", "labels": [0, 0, 0, 0, 1, 0]}
+{"text": "The Customer agrees that the subscription will continue through recurring automatic renewals until terminated.", "labels": [0, 1, 0, 0, 0, 0]}
+{"text": "Cancellation shall be processed through the appropriate workflow maintained by the Bank.", "labels": [0, 0, 0, 1, 0, 0]}
+{"text": "The Bank may require the Customer to complete further actions before cancellation is finalized.", "labels": [0, 0, 0, 1, 0, 0]}
+{"text": "Register immediately to avoid missing this time-sensitive opportunity.", "labels": [0, 0, 1, 0, 0, 0]}
+{"text": "The Customer may discontinue the service upon completion of the process specified by the Bank.", "labels": [0, 0, 0, 1, 0, 0]}
+{"text": "The Customer may request account closure through branch, online banking, or customer care.", "labels": [0, 0, 0, 0, 0, 1]}
+{"text": "Receive free EMI reminders, excluding communication charges.", "labels": [0, 0, 0, 0, 1, 0]}
+{"text": "Customers must activate the facility immediately to retain eligibility for the promotional benefits.", "labels": [0, 0, 1, 0, 0, 0]}
+{"text": "Fees relating to lien marking shall be governed by the Bank's operational tariff schedule.", "labels": [1, 0, 0, 0, 0, 0]}
+{"text": "The free payment gateway setup excludes integration charges.", "labels": [0, 0, 0, 0, 1, 0]}
+{"text": "Enjoy free digital banking access, subject to platform maintenance charges.", "labels": [0, 0, 0, 0, 1, 0]}
+{"text": "The Bank reserves the right to recover operational expenses as described in Annexure I.", "labels": [1, 0, 0, 0, 0, 0]}
+{"text": "The Company shall process termination requests according to its prevailing internal policies.", "labels": [0, 0, 0, 1, 0, 0]}
+{"text": "The Company will notify Customers of any material changes to these Terms at least 30 days in advance.", "labels": [0, 0, 0, 0, 0, 1]}
+{"text": "Membership benefits shall continue seamlessly through automatic renewal unless terminated in accordance with these Terms.", "labels": [0, 1, 0, 0, 0, 0]}
+{"text": "Customers are encouraged to act quickly, as offer availability is limited.", "labels": [0, 0, 1, 0, 0, 0]}
+{"text": "Failure to opt out before the renewal date will result in automatic continuation of the subscription.", "labels": [0, 1, 0, 0, 0, 0]}
+{"text": "The recurring service shall remain active through automatic renewals until cancelled by the User.", "labels": [0, 1, 0, 0, 0, 0]}
+{"text": "Failure to accept these Terms before the stated deadline may result in permanent withdrawal of the offer.", "labels": [0, 0, 1, 0, 0, 0]}
+{"text": "The subscription will remain active through continuous renewals until cancelled by the account holder.", "labels": [0, 1, 0, 0, 0, 0]}
+{"text": "Get a free cheque book, excluding printing and dispatch charges.", "labels": [0, 0, 0, 0, 1, 0]}
+{"text": "Receive complimentary payment reminders, excluding messaging service fees.", "labels": [0, 0, 0, 0, 1, 0]}
+{"text": "No hidden processing charges shall apply beyond those expressly disclosed in these Terms.", "labels": [0, 0, 0, 0, 0, 1]}
+{"text": "The Bank will provide a transaction reference number for every successful payment.", "labels": [0, 0, 0, 0, 0, 1]}
+{"text": "Applicable beneficiary modification charges shall be those listed in the Bank's tariff schedule.", "labels": [1, 0, 0, 0, 0, 0]}
+{"text": "The Bank may require the Customer to complete additional formalities before processing termination.", "labels": [0, 0, 0, 1, 0, 0]}
+{"text": "The Customer may withdraw an application before disbursement without any undisclosed charges.", "labels": [0, 0, 0, 0, 0, 1]}
+{"text": "Your eligibility for this benefit will lapse if acceptance is delayed beyond the specified period.", "labels": [0, 0, 1, 0, 0, 0]}
+{"text": "Receive free annual portfolio insights, excluding subscription charges.", "labels": [0, 0, 0, 0, 1, 0]}
+{"text": "The Bank may request additional information before confirming cancellation of the enrolled service.", "labels": [0, 0, 0, 1, 0, 0]}
+{"text": "Receive a free welcome gift after payment of enrollment and processing charges.", "labels": [0, 0, 0, 0, 1, 0]}
+{"text": "The User may request cancellation in a format acceptable to the Company.", "labels": [0, 0, 0, 1, 0, 0]}
+{"text": "Free KYC processing is offered, subject to document handling fees.", "labels": [0, 0, 0, 0, 1, 0]}
+{"text": "Unless cancelled before the renewal cycle, the service shall continue with automatic recurring billing.", "labels": [0, 1, 0, 0, 0, 0]}
+{"text": "The free insurance quote excludes underwriting assessment charges.", "labels": [0, 0, 0, 0, 1, 0]}
+{"text": "The renewal process shall commence automatically unless cancellation instructions are received before the renewal cutoff.", "labels": [0, 1, 0, 0, 0, 0]}
+{"text": "The premium excludes administrative charges detailed only in Annexure C to this policy document.", "labels": [1, 0, 0, 0, 0, 0]}
+{"text": "The Company will process valid cancellation requests within seven working days.", "labels": [0, 0, 0, 0, 0, 1]}
+{"text": "Customers may initiate cancellation using the prescribed method applicable at the time of the request.", "labels": [0, 0, 0, 1, 0, 0]}
+{"text": "Customers may review the total payable amount before confirming any loan agreement.", "labels": [0, 0, 0, 0, 0, 1]}
+{"text": "Enjoy free international card usage, subject to foreign transaction fees.", "labels": [0, 0, 0, 0, 1, 0]}
+{"text": "The Bank reserves the right to determine whether all cancellation requirements have been fulfilled.", "labels": [0, 0, 0, 1, 0, 0]}
+{"text": "The facility shall renew automatically and remain active until valid cancellation instructions are processed.", "labels": [0, 1, 0, 0, 0, 0]}
+{"text": "The complimentary loan consultation excludes document verification fees.", "labels": [0, 0, 0, 0, 1, 0]}
+{"text": "Respond immediately to continue receiving the current subscription benefits.", "labels": [0, 0, 1, 0, 0, 0]}
+{"text": "Get free financial planning access by paying the membership fee.", "labels": [0, 0, 0, 0, 1, 0]}
+{"text": "Get free reward points enrollment by paying the applicable joining fee.", "labels": [0, 0, 0, 0, 1, 0]}
+{"text": "Complete your enrollment immediately to secure the current insurance premium.", "labels": [0, 0, 1, 0, 0, 0]}
+{"text": "All account benefits and limitations are described in plain language within these Terms.", "labels": [0, 0, 0, 0, 0, 1]}
+{"text": "This offer is available only during the current campaign window.", "labels": [0, 0, 1, 0, 0, 0]}
+{"text": "Accept these Terms now to continue enjoying discounted service charges.", "labels": [0, 0, 1, 0, 0, 0]}
+{"text": "Receive complimentary credit monitoring upon payment of activation charges.", "labels": [0, 0, 0, 0, 1, 0]}
+{"text": "Customers may request a copy of the fee schedule without additional cost.", "labels": [0, 0, 0, 0, 0, 1]}
+{"text": "The Company may prescribe alternate methods for cancellation from time to time.", "labels": [0, 0, 0, 1, 0, 0]}
+{"text": "Your insurance rider will automatically renew each year unless discontinued before the renewal deadline.", "labels": [0, 1, 0, 0, 0, 0]}
+{"text": "Applicable digital token issuance fees shall be governed by the schedule incorporated by reference.", "labels": [1, 0, 0, 0, 0, 0]}
+{"text": "Insurance servicing fees, where applicable, are set out in Appendix B and shall form part of this agreement.", "labels": [1, 0, 0, 0, 0, 0]}
+{"text": "This preferential rate is guaranteed only until the advertised deadline.", "labels": [0, 0, 1, 0, 0, 0]}
+{"text": "The Company will process claims in accordance with the timelines communicated in the policy document.", "labels": [0, 0, 0, 0, 0, 1]}
+{"text": "The Bank will not modify the interest rate without prior notice where required by law.", "labels": [0, 0, 0, 0, 0, 1]}
+{"text": "This special campaign is nearing its conclusion, so immediate action is advised.", "labels": [0, 0, 1, 0, 0, 0]}
+{"text": "Complete your registration before midnight to retain eligibility for the campaign benefits.", "labels": [0, 0, 1, 0, 0, 0]}
+{"text": "Complete the verification process today to avoid missing this exclusive banking opportunity.", "labels": [0, 0, 1, 0, 0, 0]}
+{"text": "The Bank may process renewal charges automatically on the due date unless cancellation has been registered.", "labels": [0, 1, 0, 0, 0, 0]}
+{"text": "Users seeking to terminate the service should use the relevant cancellation facility wherever available.", "labels": [0, 0, 0, 1, 0, 0]}
+{"text": "Unless auto-renewal is disabled before expiry, the subscription shall renew automatically and applicable charges shall be debited.", "labels": [0, 1, 0, 0, 0, 0]}
+{"text": "Only applications completed today will receive the advertised cashback.", "labels": [0, 0, 1, 0, 0, 0]}
+{"text": "Enjoy free instant transfers, excluding applicable convenience charges.", "labels": [0, 0, 0, 0, 1, 0]}
+{"text": "Receive free investment advisory access after payment of the applicable subscription fee.", "labels": [0, 0, 0, 0, 1, 0]}
+{"text": "Charges for offline servicing requests shall be determined in accordance with Annexure IX.", "labels": [1, 0, 0, 0, 0, 0]}
+{"text": "The service may be discontinued through the relevant mechanism made available by the Bank.", "labels": [0, 0, 0, 1, 0, 0]}
+{"text": "Receive a free credit report, subject to payment of applicable service facilitation charges.", "labels": [0, 0, 0, 0, 1, 0]}
+{"text": "Free branch banking services are available, subject to counter service charges.", "labels": [0, 0, 0, 0, 1, 0]}
+{"text": "Failure to renew today may result in the permanent loss of loyalty benefits.", "labels": [0, 0, 1, 0, 0, 0]}
+{"text": "The Bank will process refunds to the original payment method wherever feasible.", "labels": [0, 0, 0, 0, 0, 1]}
+{"text": "Your first transaction is free, subject to applicable convenience fees imposed by payment partners.", "labels": [0, 0, 0, 0, 1, 0]}
+{"text": "The membership shall automatically renew under the applicable pricing schedule unless discontinued in advance.", "labels": [0, 1, 0, 0, 0, 0]}
+{"text": "Applications submitted after the promotional deadline may incur standard charges.", "labels": [0, 0, 1, 0, 0, 0]}
+{"text": "The Customer may access historical billing records through the online account portal.", "labels": [0, 0, 0, 0, 0, 1]}
+{"text": "The Company will send confirmation once a policy cancellation has been successfully processed.", "labels": [0, 0, 0, 0, 0, 1]}
+{"text": "The Customer shall bear all incidental charges mentioned in the supplemental pricing document issued by the Bank.", "labels": [1, 0, 0, 0, 0, 0]}
+{"text": "All transaction charges are disclosed before the Customer confirms the transaction.", "labels": [0, 0, 0, 0, 0, 1]}
+{"text": "Cancellation shall take effect only after confirmation by the appropriate department.", "labels": [0, 0, 0, 1, 0, 0]}
+{"text": "Charges relating to card upgrade requests are detailed separately in Annexure XI.", "labels": [1, 0, 0, 0, 0, 0]}
+{"text": "The plan automatically renews for the same duration unless the Customer cancels before expiry.", "labels": [0, 1, 0, 0, 0, 0]}
