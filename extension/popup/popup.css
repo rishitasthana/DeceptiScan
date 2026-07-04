@@ -3,42 +3,42 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap');
 
 :root {
-  --primary: #4F46E5;
-  --primary-hover: #4338CA;
-  --bg-color: #FFFFFF;
-  --surface-color: #F8FAFC;
-  --text-primary: #0F172A;
+  --primary: #0A2540;
+  --primary-hover: #153A62;
+  --bg-color: #F7F7F7;
+  --surface-color: #FFFFFF;
+  --text-primary: #0A2540;
   --text-secondary: #64748B;
   --border-color: #E2E8F0;
   
   --critical-bg: #FEE2E2;
   --critical-text: #DC2626;
-  --high-bg: #FFEDD5;
-  --high-text: #EA580C;
-  --medium-bg: #FEF9C3;
-  --medium-text: #CA8A04;
-  --low-bg: #DCFCE7;
-  --low-text: #16A34A;
+  --high-bg: #FFF4D6;
+  --high-text: #FFB800;
+  --medium-bg: #FFF4D6;
+  --medium-text: #FFB800;
+  --low-bg: #E6FAF2;
+  --low-text: #00D287;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --primary: #6366F1;
-    --primary-hover: #4F46E5;
-    --bg-color: #0F172A;
-    --surface-color: #1E293B;
-    --text-primary: #F8FAFC;
+    --primary: #00D287;
+    --primary-hover: #00B876;
+    --bg-color: #0A2540;
+    --surface-color: #123150;
+    --text-primary: #F7F7F7;
     --text-secondary: #94A3B8;
-    --border-color: #334155;
+    --border-color: #1E4066;
     
     --critical-bg: rgba(220, 38, 38, 0.15);
     --critical-text: #F87171;
-    --high-bg: rgba(234, 88, 12, 0.15);
-    --high-text: #FB923C;
-    --medium-bg: rgba(202, 138, 4, 0.15);
-    --medium-text: #FACC15;
-    --low-bg: rgba(22, 163, 74, 0.15);
-    --low-text: #4ADE80;
+    --high-bg: rgba(255, 184, 0, 0.15);
+    --high-text: #FFB800;
+    --medium-bg: rgba(255, 184, 0, 0.15);
+    --medium-text: #FFB800;
+    --low-bg: rgba(0, 210, 135, 0.15);
+    --low-text: #00D287;
   }
 }
 

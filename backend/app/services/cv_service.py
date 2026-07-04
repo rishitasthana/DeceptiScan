@@ -5,6 +5,7 @@ from __future__ import annotations
 import base64
 import io
 import os
+import json
 from typing import List
 
 import structlog
@@ -52,32 +53,54 @@ class CVPredictor:
         """Attempt to load model weights. Returns True if successful."""
         if self._loaded:
             return True
-        settings = get_settings()
-        model_path = settings.cv_model_path
-
-        if not os.path.exists(model_path):
-            logger.warning("CV model weights not found — using mock classifier", path=model_path)
+        # Resolve absolute path to the trained model directory relative to this file
+        model_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..", "ml", "cv", "weights", "cv_model"))
+        model_path = os.path.join(model_dir, "resnet50.pt")
+        class_map_path = os.path.join(model_dir, "class_map.json")
+        
+        # Verify both files exist
+        if not (os.path.exists(model_path) and os.path.exists(class_map_path)):
+            logger.warning(
+                "CV model weights or class map not found — using mock classifier",
+                model_path=model_path,
+                class_map_path=class_map_path,
+            )
             return False
-
+        
         try:
             import torch
             import torchvision.transforms as T
-            from torchvision.models import ResNet50_Weights, resnet50
-
+            from torchvision.models import resnet50
+            
+            # Load model architecture without pretrained weights
             self._model = resnet50(weights=None)
-            self._model.fc = torch.nn.Linear(self._model.fc.in_features, len(_LABELS))
-            state = torch.load(os.path.join(model_path, "cv_model.pt"), map_location="cpu")
+            # Load class map to determine label order
+            with open(class_map_path, "r") as f:
+                class_map = json.load(f)  # expects {"0": "pre_checked_consent", ...}
+            # Update global label list based on loaded map
+            global _LABELS
+            _LABELS = [class_map[str(i)] for i in range(len(class_map))]
+            
+            # Replace final fully connected layer to match training architecture
+            self._model.fc = torch.nn.Sequential(
+                torch.nn.Dropout(0.3),
+                torch.nn.Linear(self._model.fc.in_features, len(_LABELS)),
+            )
+            
+            # Load state dict
+            state = torch.load(model_path, map_location="cpu")
             self._model.load_state_dict(state)
             self._model.eval()
-
+            
+            # Define same preprocessing as training
             self._transform = T.Compose([
                 T.Resize((224, 224)),
                 T.ToTensor(),
                 T.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
             ])
-
+            
             self._loaded = True
-            logger.info("CV model loaded", path=model_path)
+            logger.info("CV model loaded", model_path=model_path)
             return True
         except Exception as exc:
             logger.error("Failed to load CV model", error=str(exc))
@@ -123,7 +146,7 @@ class CVPredictor:
         tensor = self._transform(image).unsqueeze(0)
         with torch.no_grad():
             logits = self._model(tensor)
-        probs = torch.sigmoid(logits).squeeze().tolist()
+        probs = torch.softmax(logits, dim=1).squeeze().tolist()
         return dict(zip(_LABELS, probs))
 
     def classify_screenshot(self, image_b64: str) -> List[UIPattern]:
