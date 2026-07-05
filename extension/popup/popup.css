@@ -3,42 +3,28 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap');
 
 :root {
-  --primary: #0A2540;
-  --primary-hover: #153A62;
-  --bg-color: #F7F7F7;
-  --surface-color: #FFFFFF;
-  --text-primary: #0A2540;
-  --text-secondary: #64748B;
-  --border-color: #E2E8F0;
+  --primary: #00e676; /* Neon green */
+  --primary-hover: #00c853;
+  --bg-color: #2a2a2b; /* Deep gray background */
+  --surface-color: #1c1c1c; /* Dark card background */
+  --text-primary: #ffffff;
+  --text-secondary: #9ca3af;
+  --border-color: #2a2a2a;
   
-  --critical-bg: #FEE2E2;
-  --critical-text: #DC2626;
-  --high-bg: #FFF4D6;
-  --high-text: #FFB800;
-  --medium-bg: #FFF4D6;
-  --medium-text: #FFB800;
-  --low-bg: #E6FAF2;
-  --low-text: #00D287;
+  --critical-bg: rgba(239, 68, 68, 0.15);
+  --critical-text: #ef4444;
+  --high-bg: rgba(249, 115, 22, 0.15);
+  --high-text: #f97316;
+  --medium-bg: rgba(234, 179, 8, 0.15);
+  --medium-text: #eab308;
+  --low-bg: rgba(0, 230, 118, 0.15);
+  --low-text: #00e676;
 }
 
+/* Force dark theme regardless of OS preference to match admin UI */
 @media (prefers-color-scheme: dark) {
   :root {
-    --primary: #00D287;
-    --primary-hover: #00B876;
-    --bg-color: #0A2540;
-    --surface-color: #123150;
-    --text-primary: #F7F7F7;
-    --text-secondary: #94A3B8;
-    --border-color: #1E4066;
-    
-    --critical-bg: rgba(220, 38, 38, 0.15);
-    --critical-text: #F87171;
-    --high-bg: rgba(255, 184, 0, 0.15);
-    --high-text: #FFB800;
-    --medium-bg: rgba(255, 184, 0, 0.15);
-    --medium-text: #FFB800;
-    --low-bg: rgba(0, 210, 135, 0.15);
-    --low-text: #00D287;
+    /* Variables remain the same as root */
   }
 }
 
@@ -77,7 +63,7 @@ body {
   width: 28px; height: 28px;
   display: flex; align-items: center; justify-content: center;
   background: var(--surface-color);
-  border-radius: 8px;
+  border-radius: 12px;
   border: 1px solid var(--border-color);
 }
 
@@ -144,7 +130,7 @@ body {
   margin: 0 20px;
   padding: 24px;
   background: var(--surface-color);
-  border-radius: 16px;
+  border-radius: 24px;
   border: 1px solid var(--border-color);
   display: flex;
   flex-direction: column;
@@ -217,7 +203,7 @@ body {
   padding: 16px;
   background: var(--surface-color);
   border: 1px solid var(--border-color);
-  border-radius: 12px;
+  border-radius: 16px;
 }
 
 .pattern-icon {
@@ -288,7 +274,7 @@ body {
 
 .btn-primary {
   background: var(--primary);
-  color: white;
+  color: #1c1c1c;
 }
 .btn-primary:hover { background: var(--primary-hover); }
 

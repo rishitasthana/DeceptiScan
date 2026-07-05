@@ -10,7 +10,13 @@ const API_BASE = "http://localhost:8000";
  */
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === "CAPTURE_SCREENSHOT") {
-    captureTab(sender.tab.id)
+    // sender.tab is undefined when called from popup, so fall back to active tab
+    const getTabId = sender.tab
+      ? Promise.resolve(sender.tab.id)
+      : chrome.tabs.query({ active: true, currentWindow: true }).then(([t]) => t?.id);
+
+    getTabId
+      .then((tabId) => captureTab(tabId))
       .then((dataUrl) => sendResponse({ success: true, dataUrl }))
       .catch((err) => sendResponse({ success: false, error: err.message }));
     return true; // Keep the message channel open for async response

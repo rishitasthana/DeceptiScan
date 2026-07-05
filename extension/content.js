@@ -14,8 +14,12 @@
   const API_BASE = "http://localhost:8000";
   const OVERLAY_HOST_ID = "__dpd_overlay_host__";
 
-  // ── Guard: don't run twice ──────────────────────────────────────────────────
-  if (document.getElementById(OVERLAY_HOST_ID)) return;
+  // ── Guard: don't run setup multiple times, but always keep message listeners active ──────────────
+  if (window.__dpd_content_script_loaded__) {
+    // Listeners are already registered — nothing more to do.
+    return;
+  }
+  window.__dpd_content_script_loaded__ = true;
 
   /**
    * Load local html2canvas library from extension context
@@ -484,23 +488,111 @@
       .replace(/\b\w/g, (c) => c.toUpperCase());
   }
 
-  // ── Clear overlay on navigation ─────────────────────────────────────────────
-  chrome.runtime.onMessage.addListener((message) => {
+  // ── Message listeners (registered before any early-return guards) ──────────────────────
+
+  /** True while a runScan() call is in-flight — prevents parallel scans. */
+  let _scanInProgress = false;
+
+  chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.type === "CLEAR_OVERLAY") {
       document.getElementById(OVERLAY_HOST_ID)?.remove();
     }
+    if (message.type === "INJECT_OVERLAY") {
+      // Popup sent a fresh result — inject the overlay immediately.
+      const existing = document.getElementById(OVERLAY_HOST_ID);
+      if (existing) existing.remove();
+      if (message.result && (message.result.risk_score?.score ?? 0) > 2) {
+        injectOverlay(message.result);
+      }
+    }
+    if (message.type === "TRIGGER_SCAN") {
+      // If a scan is already running, reply immediately so the popup doesn't hang.
+      if (_scanInProgress) {
+        sendResponse({ success: false, error: "Scan already in progress on this page" });
+        return true;
+      }
+      _scanInProgress = true;
+      // Popup requested a manual scan — run the full pipeline regardless of page type
+      runScan()
+        .then((result) => {
+          sendResponse({ success: !!result, result });
+        })
+        .catch((err) => {
+          sendResponse({ success: false, error: err.message });
+        })
+        .finally(() => {
+          _scanInProgress = false;
+        });
+      return true; // keep channel open for async response
+    }
   });
 
-  // ── Main execution ──────────────────────────────────────────────────────────
+  /**
+   * Core scan pipeline — extracted so it can be called on auto-scan or on demand.
+   * @returns {Promise<object|null>} The scan result or null.
+   */
+  async function runScan() {
+    // Guard: don't stack multiple overlays
+    const existingHost = document.getElementById(OVERLAY_HOST_ID);
+    if (existingHost) existingHost.remove();
 
-  // Only run on pages that look like financial product pages
-  const FINANCIAL_KEYWORDS = [
+    const loadingHost = injectLoadingOverlay();
+    try {
+      await loadHtml2Canvas();
+      const text = extractText();
+      const pdfUrls = extractPdfUrls();
+      const screenshotB64 = await captureScreenshot();
+
+      if (!text || text.length < 50) {
+        loadingHost.remove();
+        return null;
+      }
+
+      const scanResult = await analyzeFullPage(text, screenshotB64, pdfUrls);
+      loadingHost.remove();
+
+      if (scanResult) {
+        chrome.runtime.sendMessage({
+          type: "STORE_SCAN_RESULT",
+          domain: window.location.hostname,
+          result: scanResult,
+        });
+        if (scanResult.risk_score?.score > 2) {
+          injectOverlay(scanResult);
+        }
+      }
+      return scanResult;
+    } catch (err) {
+      loadingHost.remove();
+      console.error("[DPD] Content script error:", err);
+      return null;
+    }
+  }
+
+  // ── Auto-scan: only for financial pages ─────────────────────────────────────────────────
+
+  // Keywords to match against the URL/domain for auto-scan triggering
+  const URL_KEYWORDS = [
+    "loan", "credit", "insurance", "invest", "bank", "finance",
+    "bajaj", "hdfc", "icici", "paytm", "zerodha", "groww", "policy",
+    "sbi", "axis", "kotak", "flipkart", "amazon", "coverfox", "digit",
+    "kuvera", "policybazaar",
+  ];
+
+  // Keywords to match against page body text
+  const BODY_KEYWORDS = [
     "credit", "card", "loan", "mortgage", "insurance", "invest",
     "bank", "finance", "terms", "conditions", "agreement",
   ];
 
-  const pageText = document.body.innerText.toLowerCase();
-  const isFinancialPage = FINANCIAL_KEYWORDS.some((kw) => pageText.includes(kw));
+  const currentUrl = window.location.href.toLowerCase();
+  const currentDomain = window.location.hostname.toLowerCase();
+  const isUrlMatch = URL_KEYWORDS.some((kw) => currentUrl.includes(kw) || currentDomain.includes(kw));
+
+  const pageText = document.body?.innerText?.toLowerCase() || "";
+  const isBodyMatch = BODY_KEYWORDS.some((kw) => pageText.includes(kw));
+
+  const isFinancialPage = isUrlMatch || isBodyMatch;
 
   // Retrieve forceScan flag
   const forceScan = await new Promise((resolve) => {
@@ -513,40 +605,14 @@
     chrome.storage.local.remove("forceScan");
   }
 
-  if (!isFinancialPage && !forceScan) return;
-
-  // Show loading indicator
-  const loadingHost = injectLoadingOverlay();
-
-  try {
-    await loadHtml2Canvas();
-    const text = extractText();
-    const pdfUrls = extractPdfUrls();
-    const screenshotB64 = await captureScreenshot();
-
-    if (!text || text.length < 50) {
-      loadingHost.remove();
-      return;
-    }
-
-    const scanResult = await analyzeFullPage(text, screenshotB64, pdfUrls);
-    loadingHost.remove();
-
-    if (scanResult) {
-      // Store for popup
-      chrome.runtime.sendMessage({
-        type: "STORE_SCAN_RESULT",
-        domain: window.location.hostname,
-        result: scanResult,
-      });
-
-      // Only show overlay if risk is meaningful
-      if (scanResult.risk_score?.score > 2) {
-        injectOverlay(scanResult);
-      }
-    }
-  } catch (err) {
-    loadingHost.remove();
-    console.error("[DPD] Content script error:", err);
+  if (!isFinancialPage && !forceScan) {
+    console.log("[DPD] Not a financial page, skipping auto-scan.", currentDomain);
+    // Message listener is already registered above — manual scans will still work.
+    return;
   }
+
+  console.log("[DPD] Financial page detected, starting auto-scan...", currentDomain);
+
+  // Auto-scan: reuse the runScan pipeline
+  await runScan();
 })();

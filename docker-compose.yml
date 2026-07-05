@@ -37,9 +37,16 @@ services:
     restart: unless-stopped
     ports:
       - "8000:8000"
+    volumes:
+      # Mount local source so code changes are reflected without rebuilding
+      - ./backend:/app
     environment:
       - MONGO_URI=mongodb://mongodb:27017
+      - MONGO_DB=darkpattern
       - REDIS_URL=redis://redis:6379/0
+    env_file:
+      - ./backend/.env
+    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
     depends_on:
       mongodb:
         condition: service_healthy

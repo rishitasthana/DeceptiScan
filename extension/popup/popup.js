@@ -5,6 +5,14 @@
 const API_BASE = "http://localhost:8000";
 let currentScan = null;
 
+/** True while a scan is in-flight — prevents double-clicks launching parallel scans. */
+let _isScanRunning = false;
+
+/** Timestamp (ms) of the most recent completed scan. Used by loadHistory to delay
+ *  the backend fetch so MongoDB persistence can catch up. */
+let _lastScanTime = 0;
+
+
 const LEVEL_COLORS = {
   critical: "var(--critical-text)",
   high: "var(--high-text)",
@@ -121,23 +129,35 @@ function renderResult(scanResult) {
     const patternsContainer = document.getElementById("patterns-container");
     const patternsList = document.getElementById("patterns-list");
     patternsContainer.classList.remove("hidden");
-    
+
     patternsList.innerHTML = top_patterns
       .slice(0, 3)
       .map((p) => {
-        const label = p.label || (p.labels && p.labels[0]) || "unknown";
+        // LabeledClause has `labels` (array), UIPattern has `label` (string)
+        const labelRaw = p.label ||
+          (Array.isArray(p.labels) ? p.labels[0] : p.labels) ||
+          "unknown";
+        // labels can be enum objects with .value, or plain strings
+        const label = typeof labelRaw === "object" ? (labelRaw.value || String(labelRaw)) : String(labelRaw);
         const desc = p.explanation || p.description || "";
         const iconSvg = getIconForLabel(label);
-        // Default to medium if not provided in pattern object
-        const pLevel = p.severity || "MEDIUM"; 
-        
+
+        // Derive a risk level string from severity float (0-1)
+        const sev = typeof p.severity === "number" ? p.severity : 0;
+        let pLevel = "low";
+        if (sev >= 0.85) pLevel = "critical";
+        else if (sev >= 0.65) pLevel = "high";
+        else if (sev >= 0.35) pLevel = "medium";
+
+        const pColor = LEVEL_COLORS[pLevel] || "var(--text-secondary)";
+
         return `
           <div class="pattern-item">
             <div class="pattern-icon">${iconSvg}</div>
             <div class="pattern-content">
               <div class="pattern-header-row">
                 <span class="pattern-title">${humanize(label)}</span>
-                <span class="pattern-level" style="color: ${LEVEL_COLORS[pLevel.toLowerCase()]}; border-color: ${LEVEL_COLORS[pLevel.toLowerCase()]}">${pLevel}</span>
+                <span class="pattern-level" style="color: ${pColor}; border-color: ${pColor}">${pLevel.toUpperCase()}</span>
               </div>
               <p class="pattern-desc">${desc}</p>
             </div>
@@ -148,16 +168,22 @@ function renderResult(scanResult) {
     document.getElementById("patterns-container").classList.add("hidden");
   }
 
-  // Report button
+  // Report button — opens the full HTML report in a new tab
   document.getElementById("view-report-btn").onclick = () => {
-    chrome.tabs.create({ url: `${API_BASE}/report/pdf/${scan_id}` });
+    if (!scan_id) {
+      showToast("No scan ID available — please run a fresh scan");
+      return;
+    }
+    chrome.tabs.create({ url: `${API_BASE}/report/html/${scan_id}` });
   };
+
 
   showState("result-state");
 }
 
 /**
- * Fetch and render scan history
+ * Fetch and render scan history — sorted by most recent activity.
+ * Waits a short delay after a fresh scan to allow MongoDB persistence.
  */
 async function loadHistory() {
   const loading = document.getElementById("history-loading");
@@ -168,52 +194,97 @@ async function loadHistory() {
   empty.classList.add("hidden");
   list.classList.add("hidden");
 
+  // If a scan just completed, wait for the backend background task to persist it
+  const timeSinceScan = Date.now() - _lastScanTime;
+  if (_lastScanTime > 0 && timeSinceScan < 4000) {
+    await new Promise((r) => setTimeout(r, 1500 - Math.min(timeSinceScan, 1500)));
+  }
+
   try {
-    const response = await fetch(`${API_BASE}/products/history?limit=10`);
-    if (!response.ok) throw new Error("History fetch failed");
+    // Use /products/history which is sorted by last_scanned_at DESC (most recent first)
+    const response = await fetch(`${API_BASE}/products/history?limit=20`);
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const body = await response.json();
-    const historyData = body.data || [];
+
+    const historyData = (body.data || []).map((s) => ({
+      domain: s.domain,
+      score: typeof s.last_risk_score === "number" ? s.last_risk_score.toFixed(2) : "-",
+      level: (s.risk_level || "low").toLowerCase(),
+      scan_count: s.scan_count || 1,
+      scanned_at: s.last_scanned_at,
+    }));
+
+    // Prepend current cached scan if it's more recent than what backend returned
+    if (currentScan && historyData.length > 0) {
+      const latest = historyData[0];
+      const cachedAt = currentScan.scanned_at ? new Date(currentScan.scanned_at).getTime() : 0;
+      const latestAt = latest.scanned_at ? new Date(latest.scanned_at).getTime() : 0;
+      if (cachedAt > latestAt && currentScan.domain === latest.domain) {
+        historyData[0].score = currentScan.risk_score?.score?.toFixed(2) ?? latest.score;
+        historyData[0].level = (currentScan.risk_score?.level || latest.level).toLowerCase();
+        historyData[0].scanned_at = currentScan.scanned_at;
+      }
+    }
 
     loading.classList.add("hidden");
+
     if (historyData.length === 0) {
       empty.classList.remove("hidden");
+      const descEl = document.querySelector("#history-empty .state-desc");
+      if (descEl) descEl.textContent = "No scans yet — scan a financial page to get started.";
     } else {
       list.classList.remove("hidden");
       list.innerHTML = historyData
         .map((item) => {
-          const score = item.risk_score?.score ?? "-";
-          const level = item.risk_score?.level ?? "low";
-          const date = new Date(item.scanned_at).toLocaleDateString();
+          const color = LEVEL_COLORS[item.level] || "var(--text-secondary)";
+          const timeAgo = getTimeAgo(item.scanned_at);
+          const isRecent = _lastScanTime > 0 && (Date.now() - _lastScanTime) < 10000 && historyData.indexOf(item) === 0;
           return `
-            <div class="pattern-item" style="cursor: pointer;" id="hist-${item.scan_id}">
+            <div class="pattern-item" style="cursor:pointer; ${isRecent ? "border-left: 3px solid var(--primary-color);" : ""}" id="hist-row-${item.domain.replace(/\W/g, "-")}">
               <div class="pattern-content">
-                <div class="pattern-header-row" style="margin-bottom: 0;">
+                <div class="pattern-header-row" style="margin-bottom:2px">
                   <span class="pattern-title">${item.domain}</span>
-                  <span class="pattern-level" style="color: ${LEVEL_COLORS[level.toLowerCase()]}; border-color: ${LEVEL_COLORS[level.toLowerCase()]}">${score}/10</span>
+                  <span class="pattern-level" style="color:${color}; border-color:${color}">${item.score}/10</span>
                 </div>
-                <div style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">Scanned on ${date}</div>
+                <div style="display:flex; align-items:center; gap:8px; margin-top:4px">
+                  <div style="font-size:11px; color:var(--text-secondary)">${timeAgo}</div>
+                  ${isRecent ? '<div style="font-size:10px; background:var(--primary-color); color:#fff; border-radius:3px; padding:1px 5px">JUST SCANNED</div>' : ""}
+                  <div style="font-size:10px; color:var(--text-secondary)">${item.scan_count} scan${item.scan_count !== 1 ? "s" : ""}</div>
+                </div>
               </div>
             </div>`;
         })
         .join("");
-      
+
       // Bind click events
       historyData.forEach((item) => {
-        const el = document.getElementById(`hist-${item.scan_id}`);
+        const el = document.getElementById(`hist-row-${item.domain.replace(/\W/g, "-")}`);
         if (el) {
-          el.onclick = () => {
-            chrome.tabs.create({ url: `${API_BASE}/report/pdf/${item.scan_id}` });
-          };
+          el.onclick = () => chrome.tabs.create({ url: `${API_BASE}/products/${item.domain}` });
         }
       });
     }
   } catch (err) {
-    console.error(err);
+    console.error("[DPD] Load history error:", err);
     loading.classList.add("hidden");
     empty.classList.remove("hidden");
     const descEl = document.querySelector("#history-empty .state-desc");
-    if (descEl) descEl.textContent = "Could not load history.";
+    if (descEl) descEl.textContent = "Could not load history — is the backend running?";
   }
+}
+
+/**
+ * Format an ISO date string as a human-readable relative time (e.g. "2 min ago").
+ * @param {string} iso - ISO 8601 date string.
+ * @returns {string}
+ */
+function getTimeAgo(iso) {
+  if (!iso) return "Unknown";
+  const diff = Math.floor((Date.now() - new Date(iso).getTime()) / 1000);
+  if (diff < 60) return "Just now";
+  if (diff < 3600) return `${Math.floor(diff / 60)} min ago`;
+  if (diff < 86400) return `${Math.floor(diff / 3600)}h ago`;
+  return new Date(iso).toLocaleDateString();
 }
 
 /**
@@ -256,99 +327,148 @@ function humanize(str) {
   return str.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
 }
 
+
 /**
- * Perform a scan directly from the popup context.
- * Extracts text from the page via chrome.scripting, captures a screenshot,
- * calls the backend API, and renders results — all without relying on content scripts.
+ * Perform a scan. Tries the content script first (handles in-page overlay),
+ * then always falls through to a direct executeScript + /analyze/full API call
+ * so the user always sees a result regardless of content script state.
  *
- * @param {chrome.tabs.Tab} tab - The active tab to scan.
- * @param {string} domain - The domain of the active tab.
+ * @param {chrome.tabs.Tab} tab    The active tab.
+ * @param {string}          domain Hostname of the page.
  */
 async function scanPage(tab, domain) {
+  if (_isScanRunning) {
+    showToast("Scan already in progress\u2026");
+    return;
+  }
+  _isScanRunning = true;
   showState("loading-state");
 
+  const loadingDesc = document.getElementById("loading-desc");
+  let scanResult = null;
+
   try {
-    // 1. Extract text from the page
-    const textResults = await chrome.scripting.executeScript({
-      target: { tabId: tab.id },
-      func: () => {
-        const selectors = ["p", "li", "span", "div.terms", "div.tc", "article", "section"];
-        const seen = new Set();
-        const parts = [];
-        document.querySelectorAll(selectors.join(",")).forEach((el) => {
-          const text = el.innerText?.trim();
-          if (text && text.length > 30 && !seen.has(text)) {
-            seen.add(text);
-            parts.push(text);
-          }
-        });
-        return parts.join(" ").substring(0, 50000);
-      },
-    });
-
-    const pageText = textResults?.[0]?.result || "";
-
-    if (!pageText || pageText.length < 50) {
-      showState("no-scan-state");
-      showToast("Not enough text on this page to analyze");
-      return;
-    }
-
-    // 2. Capture screenshot via background worker
-    let screenshotB64 = null;
+    // ── Step 1: Ask content script (fast path, also handles in-page overlay) ─
     try {
-      const ssResponse = await chrome.runtime.sendMessage({ type: "CAPTURE_SCREENSHOT" });
-      if (ssResponse?.success && ssResponse.dataUrl) {
-        screenshotB64 = ssResponse.dataUrl.replace(/^data:image\/\w+;base64,/, "");
+      if (loadingDesc) loadingDesc.textContent = "Contacting page scanner\u2026";
+      const csResp = await Promise.race([
+        new Promise((resolve, reject) => {
+          chrome.tabs.sendMessage(tab.id, { type: "TRIGGER_SCAN" }, (res) => {
+            if (chrome.runtime.lastError) {
+              reject(new Error(chrome.runtime.lastError.message));
+            } else {
+              resolve(res);
+            }
+          });
+        }),
+        // 30-second cap — if CS is really slow, fall through to direct scan
+        new Promise((_, reject) =>
+          setTimeout(() => reject(new Error("Content script timeout")), 30000)
+        ),
+      ]);
+      if (csResp && csResp.success && csResp.result) {
+        scanResult = csResp.result;
+      } else {
+        // Content script replied but returned no data (busy / not enough text).
+        // Log and fall through to the direct path — do NOT show no-scan-state here.
+        console.warn("[DPD] CS returned no result:", csResp?.error);
       }
-    } catch (e) {
-      console.warn("Screenshot capture failed:", e);
+    } catch (csErr) {
+      console.warn("[DPD] Content script unavailable, using direct scan:", csErr.message);
     }
 
-    // 3. Call backend API directly (extension popup has no CORS restrictions)
-    const response = await fetch(`${API_BASE}/analyze/full`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        text: pageText,
-        screenshot_b64: screenshotB64,
-        domain: domain,
-        pdf_urls: [],
-        page_title: tab.title || domain,
-      }),
-    });
-
-    if (!response.ok) {
-      const errText = await response.text();
-      console.error("API error:", response.status, errText);
-      showState("no-scan-state");
-      showToast(`Scan failed (HTTP ${response.status})`);
-      return;
-    }
-
-    const body = await response.json();
-    const scanResult = body?.data;
-
+    // ── Step 2: Direct scan — always runs if Step 1 didn't produce a result ──
     if (!scanResult) {
-      showState("no-scan-state");
-      showToast("No results returned from API");
-      return;
+      if (loadingDesc) loadingDesc.textContent = "Extracting page content\u2026";
+
+      let pageText = "";
+      try {
+        const textResults = await chrome.scripting.executeScript({
+          target: { tabId: tab.id },
+          func: () => {
+            const selectors = ["p", "li", "span", "div.terms", "div.tc", "article", "section"];
+            const seen = new Set();
+            const parts = [];
+            document.querySelectorAll(selectors.join(",")).forEach((el) => {
+              const t = el.innerText?.trim();
+              if (t && t.length > 30 && !seen.has(t)) {
+                seen.add(t);
+                parts.push(t);
+              }
+            });
+            return parts.join(" ").substring(0, 50000);
+          },
+        });
+        pageText = textResults?.[0]?.result || "";
+      } catch (exErr) {
+        console.error("[DPD] executeScript failed:", exErr.message);
+      }
+
+      if (!pageText || pageText.length < 50) {
+        showState("no-scan-state");
+        showToast("Not enough text found on this page to analyze");
+        return;
+      }
+
+      if (loadingDesc) loadingDesc.textContent = "Analyzing with AI\u2026";
+
+      // Screenshot (non-critical)
+      let screenshotB64 = null;
+      try {
+        const ss = await chrome.runtime.sendMessage({ type: "CAPTURE_SCREENSHOT" });
+        if (ss?.success && ss.dataUrl) {
+          screenshotB64 = ss.dataUrl.replace(/^data:image\/\w+;base64,/, "");
+        }
+      } catch (_) {}
+
+      const apiResp = await fetch(`${API_BASE}/analyze/full`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          text: pageText,
+          screenshot_b64: screenshotB64,
+          domain,
+          pdf_urls: [],
+          page_title: tab.title || domain,
+        }),
+      });
+
+      if (!apiResp.ok) {
+        const errTxt = await apiResp.text().catch(() => "");
+        console.error("[DPD] API error:", apiResp.status, errTxt);
+        showState("no-scan-state");
+        showToast(`API error (HTTP ${apiResp.status}) \u2014 is the backend running?`);
+        return;
+      }
+
+      const apiBody = await apiResp.json();
+      scanResult = apiBody?.data || null;
+
+      if (!scanResult) {
+        showState("no-scan-state");
+        showToast("Scan returned no results \u2014 please try again");
+        return;
+      }
+
+      // Ask content script to inject the overlay with the fresh result (non-blocking)
+      chrome.tabs.sendMessage(
+        tab.id,
+        { type: "INJECT_OVERLAY", result: scanResult },
+        () => void chrome.runtime.lastError // suppress unchecked error
+      );
     }
 
-    // 4. Store result for future popup opens
-    chrome.runtime.sendMessage({
-      type: "STORE_SCAN_RESULT",
-      domain: domain,
-      result: scanResult,
-    });
-
-    // 5. Render in the popup
+    // ── Step 3: Render & persist ──────────────────────────────────────────────
+    chrome.runtime.sendMessage({ type: "STORE_SCAN_RESULT", domain, result: scanResult });
+    _lastScanTime = Date.now();
     renderResult(scanResult);
 
   } catch (err) {
-    console.error("Scan failed:", err);
+    console.error("[DPD] scanPage unexpected error:", err.message);
     showState("no-scan-state");
     showToast("Scan failed: " + (err.message || "Unknown error"));
+  } finally {
+    _isScanRunning = false;
   }
 }
 
@@ -362,8 +482,49 @@ async function init() {
   showState("loading-state");
 
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-  const domain = new URL(tab.url).hostname;
+
+  // Guard: if no tab or tab.url is a restricted page (chrome://, about:, etc.)
+  if (!tab || !tab.url || !tab.url.startsWith("http")) {
+    showState("no-scan-state");
+    const descEl = document.querySelector("#no-scan-state .state-desc");
+    if (descEl) descEl.textContent = "Navigate to a webpage to scan it.";
+    // Still bind settings button
+    document.getElementById("btn-header-settings").addEventListener("click", () => {
+      document.querySelector('.nav-item[data-target="view-settings"]').click();
+    });
+    // Bind scan button but show toast explaining the restriction
+    document.getElementById("btn-force-scan").addEventListener("click", () => {
+      showToast("Navigate to a webpage to scan it.");
+    });
+    return;
+  }
+
+  let domain;
+  try {
+    domain = new URL(tab.url).hostname;
+  } catch (e) {
+    console.error("[DPD] Could not parse tab URL:", e);
+    showState("no-scan-state");
+    return;
+  }
+
   document.getElementById("current-domain").textContent = domain;
+
+  // Bind Scan Now button early so it always works regardless of initial state
+  document.getElementById("btn-force-scan").addEventListener("click", () => {
+    scanPage(tab, domain);
+  });
+
+  // Settings header button
+  document.getElementById("btn-header-settings").addEventListener("click", () => {
+    document.querySelector('.nav-item[data-target="view-settings"]').click();
+  });
+
+  // Cancel button in loading state — resets the guard and returns to no-scan-state
+  document.getElementById("btn-cancel-scan").addEventListener("click", () => {
+    _isScanRunning = false;
+    showState("no-scan-state");
+  });
 
   // Check for cached scan result first
   chrome.runtime.sendMessage({ type: "GET_SCAN_RESULT", domain }, (response) => {
@@ -374,14 +535,9 @@ async function init() {
     }
   });
 
-  // Scan Now button — performs the scan directly from popup
-  document.getElementById("btn-force-scan").addEventListener("click", () => {
+  // Re-scan button (in result state)
+  document.getElementById("btn-rescan").addEventListener("click", () => {
     scanPage(tab, domain);
-  });
-  
-  // Settings header button
-  document.getElementById("btn-header-settings").addEventListener("click", () => {
-    document.querySelector('.nav-item[data-target="view-settings"]').click();
   });
 
   // Share Analysis

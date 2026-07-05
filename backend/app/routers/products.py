@@ -69,6 +69,53 @@ async def list_products(
         raise HTTPException(status_code=500, detail=str(exc))
 
 
+@router.get("/history", response_model=ProductListResponse)
+async def get_recent_history(
+    limit: int = Query(default=10, ge=1, le=100),
+) -> ProductListResponse:
+    """Return the most recently scanned domains sorted by scan time.
+
+    Args:
+        limit: Maximum number of entries to return.
+
+    Returns:
+        ProductListResponse with the most recent domain summaries.
+    """
+    try:
+        pipeline = [
+            {"$sort": {"scanned_at": -1}},
+            {
+                "$group": {
+                    "_id": "$domain",
+                    "last_risk_score": {"$first": "$risk_score.score"},
+                    "risk_level": {"$first": "$risk_score.level"},
+                    "scan_count": {"$sum": 1},
+                    "last_scanned_at": {"$first": "$scanned_at"},
+                    "scan_id": {"$first": "$scan_id"},
+                }
+            },
+            {"$sort": {"last_scanned_at": -1}},
+            {"$limit": limit},
+        ]
+        cursor = col_scan_history().aggregate(pipeline)
+        docs = await cursor.to_list(length=limit)
+
+        summaries = [
+            ProductSummary(
+                domain=d["_id"],
+                last_risk_score=d.get("last_risk_score", 1.0),
+                risk_level=d.get("risk_level", "low"),
+                scan_count=d.get("scan_count", 0),
+                last_scanned_at=d["last_scanned_at"],
+            )
+            for d in docs
+        ]
+        return ProductListResponse(data=summaries, total=len(summaries), status_code=200)
+    except Exception as exc:
+        logger.error("Get recent history failed", error=str(exc))
+        raise HTTPException(status_code=500, detail=str(exc))
+
+
 @router.get("/{domain}", response_model=ProductScanHistoryResponse)
 async def get_product_scans(
     domain: str,

@@ -1,8 +1,3 @@
-/**
- * ScanHistory — searchable list of all scanned domains with risk scores.
- * Matches the ShieldCheck "Scan History" screen design.
- */
-
 import React, { useState } from "react";
 import { useApi } from "../hooks/useApi";
 import { api } from "../api/client";
@@ -41,70 +36,78 @@ export default function ScanHistory() {
   const safeCount = raw.filter((p) => p.risk_level === "low"      || p.last_risk_score <= 3).length;
 
   return (
-    <div className="page-container animate-in">
-      <div className="page-header">
+    <div className="page-container" style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+      <div className="flex-between">
         <div>
-          <h1 className="page-title">Scan History</h1>
-          <p className="page-subtitle">All previously analyzed domains and their risk scores</p>
+          <h1 style={{ fontSize: 24, fontWeight: 700, marginBottom: 4 }}>Scan History</h1>
+          <p className="text-muted" style={{ fontSize: 14 }}>All previously analyzed domains and their risk scores</p>
         </div>
-        <button className="btn btn-outline" onClick={refetch}>Refresh</button>
+        <button style={{ 
+          background: "var(--bg-card)", color: "var(--text-primary)", 
+          padding: "8px 16px", borderRadius: "var(--radius-md)", border: "1px solid var(--border)",
+          fontWeight: 500 
+        }} onClick={refetch}>
+          Refresh
+        </button>
       </div>
 
       {/* Stats row */}
-      <div className="stat-grid" style={{ gridTemplateColumns: "repeat(3, 1fr)", marginBottom: 20 }}>
-        <div className="stat-card primary">
-          <div className="stat-value">{total}</div>
-          <div className="stat-label">Domains Scanned</div>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 16 }}>
+        <div className="bento-card">
+          <div style={{ fontSize: 32, fontWeight: 700, color: "var(--text-primary)" }}>{total}</div>
+          <div className="text-secondary" style={{ fontSize: 13, fontWeight: 500, marginTop: 4 }}>Domains Scanned</div>
         </div>
-        <div className="stat-card">
-          <div className="stat-value" style={{ color: "var(--risk-critical)" }}>{critCount}</div>
-          <div className="stat-label">High-Risk Sites</div>
-          <div className="stat-sublabel">Score ≥ 8</div>
+        <div className="bento-card">
+          <div style={{ fontSize: 32, fontWeight: 700, color: "var(--critical)" }}>{critCount}</div>
+          <div className="text-secondary" style={{ fontSize: 13, fontWeight: 500, marginTop: 4 }}>High-Risk Sites</div>
+          <div className="text-muted" style={{ fontSize: 11, marginTop: 2 }}>Score ≥ 8</div>
         </div>
-        <div className="stat-card">
-          <div className="stat-value" style={{ color: "var(--risk-low)" }}>{safeCount}</div>
-          <div className="stat-label">Safe Sites</div>
-          <div className="stat-sublabel">Score ≤ 3</div>
+        <div className="bento-card">
+          <div style={{ fontSize: 32, fontWeight: 700, color: "var(--low)" }}>{safeCount}</div>
+          <div className="text-secondary" style={{ fontSize: 13, fontWeight: 500, marginTop: 4 }}>Safe Sites</div>
+          <div className="text-muted" style={{ fontSize: 11, marginTop: 2 }}>Score ≤ 3</div>
         </div>
       </div>
 
-      <div className="card">
+      <div className="bento-card" style={{ flex: 1, padding: 0, overflow: "hidden" }}>
         {/* Search + header */}
-        <div className="card-header" style={{ gap: 16, flexWrap: "wrap" }}>
-          <span className="card-title">All Scanned Domains</span>
-          <div className="search-input-wrap" style={{ width: 260 }}>
+        <div className="flex-between" style={{ padding: "20px 24px", borderBottom: "1px solid var(--border)" }}>
+          <span className="card-title" style={{ marginBottom: 0 }}>All Scanned Domains</span>
+          <div style={{ background: "var(--bg-input)", borderRadius: "var(--radius-md)", padding: "8px 12px", display: "flex", gap: 8, alignItems: "center" }}>
+            <span className="text-muted">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            </span>
             <input
-              className="search-input"
               placeholder="Filter by domain…"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              style={{ paddingLeft: 12 }}
+              style={{ background: "transparent", border: "none", color: "var(--text-primary)", outline: "none", fontSize: 13 }}
             />
           </div>
         </div>
 
         {loading && (
-          <div className="loading-spinner">
-            <div className="spinner-ring" />Loading history…
+          <div className="flex-center" style={{ padding: 40 }}>
+            <div className="spinner" />
           </div>
         )}
 
         {!loading && products.length === 0 && (
-          <div className="empty-state">
+          <div className="flex-center text-muted" style={{ padding: 40 }}>
             <p>No domains match "{search}". Try a different search term.</p>
           </div>
         )}
 
         {!loading && products.length > 0 && (
           <div style={{ overflowX: "auto" }}>
-            <table className="data-table">
+            <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
               <thead>
-                <tr>
-                  <th>Domain</th>
-                  <th>Risk</th>
-                  <th>Scans</th>
-                  <th>Last Scanned</th>
-                  <th>Actions</th>
+                <tr style={{ borderBottom: "1px solid var(--border)", color: "var(--text-secondary)", fontSize: 12, textTransform: "uppercase" }}>
+                  <th style={{ padding: "16px 24px", fontWeight: 600 }}>Domain</th>
+                  <th style={{ padding: "16px 24px", fontWeight: 600 }}>Risk</th>
+                  <th style={{ padding: "16px 24px", fontWeight: 600 }}>Scans</th>
+                  <th style={{ padding: "16px 24px", fontWeight: 600 }}>Last Scanned</th>
+                  <th style={{ padding: "16px 24px", fontWeight: 600, textAlign: "right" }}>Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -112,33 +115,32 @@ export default function ScanHistory() {
                   const level = p.risk_level || scoreToLevel(p.last_risk_score);
                   const score = typeof p.last_risk_score === "number" ? Math.round(p.last_risk_score) : "—";
                   return (
-                    <tr key={p.domain}>
-                      <td>
-                      <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                        <div>
-                          <div style={{ fontWeight: 600, color: "var(--text-primary)" }}>{p.domain}</div>
-                        </div>
-                      </div>
-                    </td>
-                      <td>
-                        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                          <RiskGauge score={score} level={level} size={42} />
+                    <tr key={p.domain} style={{ borderBottom: "1px solid var(--border)", transition: "background 0.2s" }} onMouseOver={(e) => e.currentTarget.style.background = "var(--bg-hover)"} onMouseOut={(e) => e.currentTarget.style.background = "transparent"}>
+                      <td style={{ padding: "16px 24px", fontWeight: 600, color: "var(--text-primary)" }}>
+                        {p.domain}
+                      </td>
+                      <td style={{ padding: "16px 24px" }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                          <RiskGauge score={score} level={level} size={36} />
                           <RiskBadge level={level} />
                         </div>
                       </td>
-                      <td style={{ color: "var(--text-secondary)", fontWeight: 500 }}>
+                      <td style={{ padding: "16px 24px", color: "var(--text-secondary)", fontWeight: 500 }}>
                         {p.scan_count}
                       </td>
-                      <td style={{ fontSize: 12, color: "var(--text-secondary)" }}>
+                      <td style={{ padding: "16px 24px", fontSize: 13, color: "var(--text-secondary)" }}>
                         {p.last_scanned_at
                           ? new Date(p.last_scanned_at).toLocaleString()
                           : "—"}
                       </td>
-                      <td>
+                      <td style={{ padding: "16px 24px", textAlign: "right" }}>
                         <a
                           href={`http://localhost:8000/products/${encodeURIComponent(p.domain)}`}
                           target="_blank" rel="noreferrer"
-                          className="btn btn-ghost btn-sm"
+                          style={{ 
+                            padding: "8px 12px", background: "var(--bg-input)", color: "var(--text-primary)", 
+                            borderRadius: "var(--radius-md)", fontSize: 12, fontWeight: 500 
+                          }}
                         >
                           View Report →
                         </a>
@@ -151,7 +153,7 @@ export default function ScanHistory() {
           </div>
         )}
 
-        <div className="pagination">
+        <div style={{ padding: "16px 24px", fontSize: 12, color: "var(--text-muted)", borderTop: "1px solid var(--border)" }}>
           <span>{products.length} domain{products.length !== 1 ? "s" : ""} shown</span>
         </div>
       </div>

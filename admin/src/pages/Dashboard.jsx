@@ -1,502 +1,221 @@
-/**
- * Dashboard — Detailed Analysis Report view matching the ShieldCheck Stitch design.
- * Shows: metric cards, NLP clause table, Plain English Summary, CV pattern mapping,
- * Community Awareness section, and action buttons.
- */
-
 import React, { useState, useEffect } from "react";
-import { useApi } from "../hooks/useApi";
-import { api } from "../api/client";
-import RiskGauge from "../components/RiskGauge";
-import RiskBadge from "../components/RiskBadge";
-import PatternCard from "../components/PatternCard";
 
 const API_BASE = "http://localhost:8000";
 
-/** Derive risk level from score 1–10 */
-function scoreToLevel(score) {
-  if (score >= 8) return "critical";
-  if (score >= 6) return "high";
-  if (score >= 4) return "medium";
-  return "low";
-}
-
-/** Humanize snake_case */
-function humanize(s) {
-  return s.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
-}
-
-// ── Mock analysis data shown when no API data is available ───────
-const MOCK = {
-  domain: "premiumloan.com",
-  page_title: "Premium Personal Loan — Apply Now",
-  risk_score: { score: 8, level: "high", nlp_score: 7.2, cv_score: 8.6 },
-  nlp_result: {
-    labeled_clauses: [
-      { text: "The lender reserves the right to charge an additional processing fee…", labels: ["fee_burial"],        severity: 0.8, confidence: 0.91 },
-      { text: "Your subscription will auto-renew unless cancelled 30 days in advance…", labels: ["auto_renewal_trap"], severity: 0.75, confidence: 0.88 },
-      { text: "Apply Now! Offer expires in 24 hours — Limited slots remaining!", labels: ["urgency_language"],   severity: 0.6,  confidence: 0.82 },
-      { text: "Continuing on our site means you agree to share your data with partners.", labels: ["ambiguous_opt_out"], severity: 0.65, confidence: 0.79 },
-      { text: "Aggressive Recovery — Outstanding dues attract compound interest of 36% p.a.", labels: ["fee_burial"],        severity: 0.85, confidence: 0.94 },
-    ],
-    plain_english_summary: "This loan product uses multiple manipulative clauses. Fees are buried deep in paragraph 14. Auto-renewal is pre-selected by default. Urgency language creates artificial pressure. The 'Apply Now' button uses misleading prominence to rush the decision.",
-  },
-  cv_result: {
-    patterns: [
-      { label: "false_hierarchy",      confidence: 0.99, severity: 0.9,  description: "False Hierarchy Button — XY: [842, 120] to [820, 150]" },
-      { label: "deceptive_micro_text", confidence: 0.92, severity: 0.8,  description: "Deceptive Micro-text — XY: [120, 440] to [789, 480]" },
-      { label: "urgency_countdown",    confidence: 0.96, severity: 0.75, description: "Urgency Countdown — XY: [600, 20] to [720, 60]" },
-    ],
-  },
-  scan_id: "mock-scan-001",
-};
-
 export default function Dashboard() {
-  const [products, setProducts] = useState([]);
+  const [stats, setStats] = useState({ totalScans: 0, avgRisk: 0, recentScans: [] });
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [selectedDomain, setSelectedDomain] = useState(null);
-  const [activeScan, setActiveScan] = useState(null);
-  const [scanLoading, setScanLoading] = useState(false);
 
-  const fetchProducts = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const res = await fetch(`${API_BASE}/products`);
-      if (!res.ok) throw new Error("Failed to fetch products");
-      const body = await res.json();
-      const list = body.data || [];
-      setProducts(list);
-      if (list.length > 0) {
-        setSelectedDomain(list[0].domain);
-      } else {
+  useEffect(() => {
+    // In a real app, this would fetch from an aggregate endpoint.
+    // For now, we'll fetch /products and calculate manually.
+    fetch(`${API_BASE}/products?page=1&page_size=50`)
+      .then((res) => res.json())
+      .then((body) => {
+        const data = body.data || [];
+        const total = data.length;
+        const avg = total > 0 ? (data.reduce((acc, curr) => acc + curr.last_risk_score, 0) / total).toFixed(1) : 0;
+        
+        setStats({
+          totalScans: total,
+          avgRisk: avg,
+          recentScans: data.slice(0, 5) // top 5
+        });
         setLoading(false);
-      }
-    } catch (err) {
-      setError(err.message);
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchProducts();
-  }, []);
-
-  useEffect(() => {
-    if (!selectedDomain) return;
-    const fetchScans = async () => {
-      setScanLoading(true);
-      try {
-        const res = await fetch(`${API_BASE}/products/${encodeURIComponent(selectedDomain)}`);
-        if (!res.ok) throw new Error("Failed to fetch scans");
-        const body = await res.json();
-        const scans = body.data || [];
-        if (scans.length > 0) {
-          setActiveScan(scans[0]);
-        }
-      } catch (err) {
+      })
+      .catch((err) => {
         console.error(err);
-      } finally {
-        setScanLoading(false);
         setLoading(false);
-      }
-    };
-    fetchScans();
-  }, [selectedDomain]);
+      });
+  }, []);
 
   if (loading) {
     return (
-      <div className="page-container" style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "80vh" }}>
-        <div className="loading-spinner"><div className="spinner-ring" />Loading Dashboard…</div>
+      <div className="page-container flex-center">
+        <div className="spinner"></div>
       </div>
     );
   }
-
-  if (products.length === 0) {
-    return (
-      <div className="page-container" style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", minHeight: "80vh", gap: 16 }}>
-        <h2>No scans yet</h2>
-        <p style={{ color: "var(--text-muted)" }}>Use the Chrome extension to scan financial pages.</p>
-      </div>
-    );
-  }
-
-  const scan = activeScan || MOCK;
-  const risk = scan.risk_score;
-  const nlp = {
-    labeled_clauses: scan.nlp_results || [],
-    plain_english_summary: scan.nlp_results?.map(c => c.explanation || c.description).filter(Boolean).join(" ") || "No summary available."
-  };
-  const cv = {
-    patterns: scan.cv_results || []
-  };
-
-  const nlpCount = nlp?.labeled_clauses?.filter((c) => !c.labels?.includes("clean")).length || 0;
-  const cvCount  = cv?.patterns?.filter((p) => p.label !== "clean").length || 0;
-  const total    = nlpCount + cvCount;
 
   return (
-    <div className="page-container animate-in">
-      {/* ── Page header ────────────────────────────────────────── */}
-      <div className="page-header">
+    <div className="page-container" style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gridAutoRows: "minmax(280px, auto)", gap: 16 }}>
+      
+      {/* ── Overview Card ── */}
+      <div className="bento-card">
+        <div className="card-title">
+          <span>Overview</span>
+          <select style={{ background: "transparent", color: "var(--text-secondary)", border: "none", outline: "none", fontSize: 13, cursor: "pointer" }}>
+            <option>Last 7 days</option>
+            <option>Last 30 days</option>
+          </select>
+        </div>
+        
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 32 }}>
+          {/* Total Scans */}
+          <div style={{ background: "var(--bg-input)", borderRadius: "var(--radius-md)", padding: 20 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, color: "var(--text-secondary)", fontSize: 13, marginBottom: 8 }}>
+              <span style={{ display: "flex", alignItems: "center", color: "var(--accent)" }}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+              </span> 
+              Total Scans
+            </div>
+            <div style={{ display: "flex", alignItems: "baseline", gap: 12 }}>
+              <span style={{ fontSize: 36, fontWeight: 700, color: "var(--text-primary)" }}>{stats.totalScans}</span>
+              <span className="badge badge-green">↑ 12.5%</span>
+            </div>
+          </div>
+          
+          {/* Average Risk */}
+          <div style={{ background: "var(--bg-input)", borderRadius: "var(--radius-md)", padding: 20 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, color: "var(--text-secondary)", fontSize: 13, marginBottom: 8 }}>
+              <span style={{ display: "flex", alignItems: "center", color: "var(--critical)" }}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+              </span> 
+              Average Risk
+            </div>
+            <div style={{ display: "flex", alignItems: "baseline", gap: 12 }}>
+              <span style={{ fontSize: 36, fontWeight: 700, color: "var(--text-primary)" }}>{stats.avgRisk}</span>
+              <span className="badge badge-red">↑ 2.1%</span>
+            </div>
+          </div>
+        </div>
+
         <div>
-          <h1 className="page-title">Detailed Analysis Report</h1>
-          <p className="page-subtitle">
-            {scan.page_title} &mdash;{" "}
-            <span style={{ color: "var(--indigo-dark)", fontWeight: 600 }}>{scan.domain}</span>
-          </p>
-        </div>
-        <div style={{ display: "flex", gap: 8 }}>
-          <button className="btn btn-outline" onClick={fetchProducts}>Refresh</button>
-          <a
-            href={`${API_BASE}/report/pdf/${scan.scan_id}`}
-            target="_blank" rel="noreferrer"
-            className="btn btn-primary"
-          >
-            Download PDF Report
-          </a>
-        </div>
-      </div>
-
-      {/* ── Metric cards row ───────────────────────────────────── */}
-      <div className="stat-grid" style={{ gridTemplateColumns: "repeat(4, 1fr)" }}>
-        {/* Risk score gauge card */}
-        <div className="stat-card" style={{ gridColumn: "1", display: "flex", alignItems: "center", gap: 14 }}>
-          <RiskGauge score={risk.score} level={risk.level} size={72} />
-          <div>
-            <div className="stat-label">Risk Score</div>
-            <RiskBadge level={risk.level} />
-            <div style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 4 }}>
-              NLP {risk.nlp_score} · CV {risk.cv_score}
-            </div>
-          </div>
-        </div>
-
-        {/* Total detected */}
-        <div className="stat-card primary">
-          <div className="stat-value">{total}</div>
-          <div className="stat-label">Patterns</div>
-          <div className="stat-sublabel">Total Detected</div>
-        </div>
-
-        {/* NLP */}
-        <div className="stat-card">
-          <div className="stat-value">{nlpCount}</div>
-          <div className="stat-label">NLP Detections</div>
-          <div className="stat-sublabel">Textual Clauses</div>
-        </div>
-
-        {/* CV */}
-        <div className="stat-card">
-          <div className="stat-value">{cvCount}</div>
-          <div className="stat-label">CV Detections</div>
-          <div className="stat-sublabel">UI/UX Patterns</div>
-        </div>
-      </div>
-
-      {/* ── Risk breakdown bar ─────────────────────────────────── */}
-      <div className="card" style={{ marginBottom: 20, padding: "14px 20px" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 20, flexWrap: "wrap" }}>
-          <span style={{ fontSize: 12, fontWeight: 600, color: "var(--text-secondary)", textTransform: "uppercase", letterSpacing: "0.5px" }}>
-            Severity breakdown
-          </span>
-          {[
-            { label: "High", count: 3, cls: "badge-high" },
-            { label: "Medium", count: 3, cls: "badge-medium" },
-            { label: "Low", count: 2, cls: "badge-low" },
-          ].map(({ label, count, cls }) => (
-            <div key={label} style={{ display: "flex", alignItems: "center", gap: 6 }}>
-              <span className={`badge ${cls}`}>{label}</span>
-              <span style={{ fontSize: 13, fontWeight: 700, color: "var(--text-primary)" }}>{count}</span>
-            </div>
-          ))}
-          <div style={{ flex: 1, display: "flex", borderRadius: 6, overflow: "hidden", height: 8, gap: 2, minWidth: 120 }}>
-            <div style={{ flex: 3, background: "var(--risk-high)",   borderRadius: "6px 0 0 6px" }} />
-            <div style={{ flex: 3, background: "var(--risk-medium)" }} />
-            <div style={{ flex: 2, background: "var(--risk-low)",    borderRadius: "0 6px 6px 0" }} />
-          </div>
-        </div>
-      </div>
-
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 340px", gap: 20 }}>
-        {/* ── Left column ──────────────────────────────────────── */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-
-          {/* Text & Clause Analysis */}
-          <div className="card">
-            <div className="card-header">
-              <span className="card-title">
-                Text &amp; Clause Analysis
-              </span>
-              <span className="section-tag badge-indigo">
-                NLP — {nlpCount} detections
-              </span>
-            </div>
-            <div style={{ overflowX: "auto" }}>
-              <table className="data-table">
-                <thead>
-                  <tr>
-                    <th>Clause Snippet</th>
-                    <th>Label</th>
-                    <th>Severity</th>
-                    <th>Confidence</th>
-                    <th style={{ width: 20 }} />
-                  </tr>
-                </thead>
-                <tbody>
-                  {(nlp?.labeled_clauses || []).map((c, i) => (
-                    <PatternCard
-                      key={i}
-                      label={c.labels?.[0] || "unknown"}
-                      text={c.text}
-                      severity={c.severity}
-                      confidence={c.confidence}
-                      description={c.explanation}
-                      variant="row"
-                    />
-                  ))}
-                  {(!nlp?.labeled_clauses || nlp.labeled_clauses.length === 0) && (
-                    <tr>
-                      <td colSpan={5} style={{ textAlign: "center", color: "var(--text-muted)", padding: 24 }}>
-                        No NLP data available.
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          {/* Computer Vision: UI Pattern Mapping */}
-          <div className="card">
-            <div className="card-header">
-              <span className="card-title">
-                Computer Vision: UI Pattern Mapping
-              </span>
-              <span className="section-tag" style={{ background: "var(--risk-critical-bg)", color: "var(--risk-critical)", fontSize: 10, fontWeight: 700, padding: "2px 9px", borderRadius: 20 }}>
-                {cvCount} TRAPS DETECTED
-              </span>
-            </div>
-            <div className="card-body">
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, alignItems: "start" }}>
-                {/* Screenshot placeholder */}
-                <div style={{
-                  background: "linear-gradient(135deg, #1E3A5F 0%, #0F2A4A 100%)",
-                  borderRadius: "var(--radius-md)",
-                  aspectRatio: "9/16",
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  color: "rgba(255,255,255,0.5)",
-                  fontSize: 13,
-                  fontWeight: 500,
-                  gap: 8,
-                  position: "relative",
-                  overflow: "hidden",
-                  maxHeight: 260,
+          <div style={{ fontSize: 14, fontWeight: 500, marginBottom: 4 }}>Recent Domains Analyzed</div>
+          <div style={{ fontSize: 12, color: "var(--text-secondary)", marginBottom: 16 }}>Showing latest activity from the extension.</div>
+          <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
+            {stats.recentScans.map((s, i) => (
+              <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
+                <div style={{ 
+                  width: 48, height: 48, borderRadius: "50%", background: "var(--bg-input)", 
+                  display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text-secondary)",
+                  border: "2px solid var(--border)"
                 }}>
-                  {/* Simulated bounding boxes */}
-                  <div style={{ position: "absolute", top: "15%", left: "15%", right: "15%", height: "10%", border: "2px solid rgba(239,68,68,0.7)", borderRadius: 4 }} />
-                  <div style={{ position: "absolute", top: "40%", left: "10%", right: "30%", height: "8%", border: "2px solid rgba(239,68,68,0.7)", borderRadius: 4 }} />
-                  <div style={{ position: "absolute", bottom: "20%", left: "20%", right: "20%", height: "8%", border: "2px dashed rgba(249,115,22,0.8)", borderRadius: 4 }} />
-                  <span style={{ zIndex: 1, fontSize: 11, textAlign: "center", padding: "0 16px" }}>
-                    Screenshot scan
-                  </span>
-                  <div style={{
-                    position: "absolute", bottom: 8, left: 8, right: 8,
-                    background: "rgba(0,0,0,0.7)", borderRadius: 4,
-                    padding: "3px 8px", fontSize: 10, color: "rgba(255,255,255,0.7)",
-                    textAlign: "center",
-                  }}>
-                    ✗ Spatial Confidence: 88.4%
-                  </div>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
                 </div>
-
-                {/* Detected coordinates */}
-                <div>
-                  <div style={{ fontSize: 12, fontWeight: 700, color: "var(--text-secondary)", marginBottom: 12, textTransform: "uppercase", letterSpacing: "0.5px" }}>
-                    Detected Coordinate Data
-                  </div>
-                  {(cv?.patterns || []).map((p, i) => (
-                    <div
-                      key={i}
-                      style={{
-                        padding: "10px 12px",
-                        background: "var(--bg-card-2)",
-                        border: "1px solid var(--border)",
-                        borderRadius: "var(--radius-md)",
-                        marginBottom: 8,
-                      }}
-                    >
-                      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                        <div>
-                          <div style={{ fontSize: 12, fontWeight: 700, color: "var(--text-primary)" }}>
-                            {humanize(p.label)}
-                          </div>
-                          <div style={{ fontSize: 10, color: "var(--text-muted)", marginTop: 2 }}>
-                            {p.description}
-                          </div>
-                        </div>
-                        <span style={{ fontSize: 11, fontWeight: 600, color: "var(--risk-critical)", background: "var(--risk-critical-bg)", padding: "2px 8px", borderRadius: 10 }}>
-                          {(p.confidence * 100).toFixed(0)}% Confidence
-                        </span>
-                      </div>
-                    </div>
-                  ))}
-                  <button className="btn btn-primary" style={{ width: "100%", marginTop: 8, justifyContent: "center" }}>
-                    Expand Visual Analysis
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-        </div>
-
-        {/* ── Right column ──────────────────────────────────────── */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-
-          {/* Plain English Summary */}
-          <div className="info-card">
-            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
-              <span style={{ fontSize: 13, fontWeight: 700, color: "var(--indigo-dark)" }}>Plain English Summary</span>
-            </div>
-            <p style={{ fontSize: 13, color: "var(--text-primary)", lineHeight: 1.7 }}>
-              {nlp?.plain_english_summary ||
-                "This loan product uses multiple manipulative clauses. Fees are buried deep in paragraph 14. Auto-renewal is pre-selected by default. Urgency language creates artificial pressure. The 'Apply Now' button uses misleading prominence to rush the decision."}
-            </p>
-          </div>
-
-          {/* Top Patterns quick list */}
-          <div className="card">
-            <div className="card-header">
-              <span className="card-title">Top Patterns</span>
-            </div>
-            <div className="card-body" style={{ paddingTop: 12 }}>
-              {[...(nlp?.labeled_clauses || []), ...(cv?.patterns || [])]
-                .filter((p) => !(p.labels || [p.label])[0]?.includes("clean"))
-                .slice(0, 5)
-                .map((p, i) => (
-                  <PatternCard
-                    key={i}
-                    label={(p.labels?.[0] || p.label || "unknown")}
-                    description={p.explanation || p.description}
-                    severity={p.severity}
-                    confidence={p.confidence}
-                    variant="card"
-                  />
-                ))}
-            </div>
-          </div>
-
-          {/* Community Awareness */}
-          <div className="card">
-            <div className="card-header">
-              <span className="card-title">Community Awareness</span>
-            </div>
-            <div className="card-body">
-              <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 14 }}>
-                <div style={{ display: "flex" }}>
-                  {["U1", "U2", "U3"].map((text, i) => (
-                    <div
-                      key={i}
-                      style={{
-                        width: 28, height: 28, borderRadius: "50%",
-                        background: "var(--bg-card-2)", border: "2px solid var(--bg-card)",
-                        display: "flex", alignItems: "center", justifyContent: "center",
-                        fontSize: 10, fontWeight: 600, color: "var(--text-secondary)",
-                        marginLeft: i > 0 ? -8 : 0,
-                        zIndex: 3 - i,
-                      }}
-                    >
-                      {text}
-                    </div>
-                  ))}
-                  <div style={{
-                    width: 28, height: 28, borderRadius: "50%",
-                    background: "var(--indigo-light)", border: "2px solid var(--bg-card)",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    fontSize: 9, fontWeight: 700, color: "var(--indigo-dark)",
-                    marginLeft: -8, zIndex: 0,
-                  }}>
-                    +452
-                  </div>
-                </div>
-                <p style={{ fontSize: 12, color: "var(--text-secondary)", lineHeight: 1.5 }}>
-                  <strong style={{ color: "var(--risk-critical)" }}>452 users</strong> have flagged this specific product for deceptive lending practices.
-                </p>
-              </div>
-              <button className="btn btn-outline" style={{ width: "100%", justifyContent: "center", borderColor: "var(--risk-critical)", color: "var(--risk-critical)" }}>
-                Add My Flag
-              </button>
-            </div>
-          </div>
-
-          {/* Scanned Products quick list */}
-          <div className="card">
-            <div className="card-header">
-              <span className="card-title">Recent Scans</span>
-            </div>
-            {loading && <div className="loading-spinner"><div className="spinner-ring" />Loading…</div>}
-            {!loading && products.slice(0, 5).map((p) => (
-              <div
-                key={p.domain}
-                style={{
-                  padding: "10px 16px",
-                  borderBottom: "1px solid var(--border)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  cursor: "pointer",
-                }}
-                onClick={() => setSelectedDomain(p.domain)}
-              >
-                <div>
-                  <div style={{ fontSize: 13, fontWeight: 600, color: "var(--text-primary)" }}>{p.domain}</div>
-                  <div style={{ fontSize: 11, color: "var(--text-muted)" }}>{p.scan_count} scans</div>
-                </div>
-                <RiskBadge level={p.risk_level} score={p.last_risk_score?.toFixed(0)} />
+                <span style={{ fontSize: 11, color: "var(--text-secondary)", maxWidth: 60, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                  {s.domain}
+                </span>
               </div>
             ))}
-            {!loading && products.length === 0 && (
-              <div className="empty-state" style={{ padding: "20px 16px" }}>
-                <p>No products scanned yet.</p>
-              </div>
+            {stats.recentScans.length > 0 && (
+              <button style={{ 
+                width: 48, height: 48, borderRadius: "50%", border: "1px dashed var(--border)",
+                display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text-secondary)"
+              }}>
+                →
+              </button>
             )}
           </div>
         </div>
       </div>
 
-      {/* ── Bottom action bar ──────────────────────────────────── */}
-      <div style={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        marginTop: 24,
-        paddingTop: 20,
-        borderTop: "1px solid var(--border)",
-      }}>
-        <div style={{ display: "flex", gap: 10 }}>
-          <a
-            href={`${API_BASE}/report/pdf/${scan.scan_id}`}
-            target="_blank" rel="noreferrer"
-            className="btn btn-primary"
-          >
-            Download PDF Report
-          </a>
-          <button className="btn btn-outline">
-            Share Analysis
-          </button>
+      {/* ── Risk Distribution (Donut Chart placeholder) ── */}
+      <div className="bento-card">
+        <div className="card-title">Risk Distribution</div>
+        <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+          {/* SVG Donut */}
+          <div style={{ position: "relative", width: 160, height: 160, marginBottom: 24 }}>
+            <svg width="160" height="160" viewBox="0 0 160 160">
+              <circle cx="80" cy="80" r="60" fill="none" stroke="var(--bg-input)" strokeWidth="20" />
+              <circle cx="80" cy="80" r="60" fill="none" stroke="var(--accent)" strokeWidth="20" strokeDasharray="377" strokeDashoffset="260" style={{ transform: "rotate(-90deg)", transformOrigin: "center" }} />
+              <circle cx="80" cy="80" r="60" fill="none" stroke="var(--critical)" strokeWidth="20" strokeDasharray="377" strokeDashoffset="310" style={{ transform: "rotate(20deg)", transformOrigin: "center" }} />
+            </svg>
+            <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+              <span style={{ fontSize: 24, fontWeight: 700 }}>68%</span>
+              <span style={{ fontSize: 11, color: "var(--text-secondary)" }}>Safe</span>
+            </div>
+          </div>
+          <div style={{ display: "flex", gap: 16, width: "100%", justifyContent: "center" }}>
+            <div style={{ textAlign: "center" }}>
+              <div style={{ fontSize: 11, color: "var(--text-secondary)", display: "flex", alignItems: "center", gap: 4 }}><span style={{width: 8, height: 8, background: "var(--accent)", borderRadius: 2}}></span> Low</div>
+              <div style={{ fontSize: 13, fontWeight: 600, marginTop: 4 }}>68%</div>
+            </div>
+            <div style={{ textAlign: "center" }}>
+              <div style={{ fontSize: 11, color: "var(--text-secondary)", display: "flex", alignItems: "center", gap: 4 }}><span style={{width: 8, height: 8, background: "var(--critical)", borderRadius: 2}}></span> High</div>
+              <div style={{ fontSize: 13, fontWeight: 600, marginTop: 4 }}>32%</div>
+            </div>
+          </div>
         </div>
-        <button
-          className="btn btn-ghost btn-sm"
-          style={{ color: "var(--text-muted)", fontSize: 12 }}
-        >
-          Report False Positive or System Error
+      </div>
+
+      {/* ── Scan Volume (Bar Chart placeholder) ── */}
+      <div className="bento-card">
+        <div className="card-title">
+          <span>Scan Volume</span>
+          <select style={{ background: "transparent", color: "var(--text-secondary)", border: "none", outline: "none", fontSize: 13, cursor: "pointer" }}>
+            <option>Last 7 days</option>
+          </select>
+        </div>
+        <div style={{ display: "flex", alignItems: "baseline", gap: 12, marginBottom: 24 }}>
+          <span style={{ fontSize: 32, fontWeight: 700 }}>142</span>
+          <span className="badge badge-green">↑ 36.8%</span>
+        </div>
+        
+        {/* CSS Bar Chart */}
+        <div style={{ flex: 1, display: "flex", alignItems: "flex-end", gap: 8, height: 120 }}>
+          {[30, 45, 20, 60, 85, 40, 50].map((h, i) => (
+            <div key={i} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
+              {h === 85 && (
+                <div style={{ background: "var(--bg-input)", color: "var(--text-primary)", fontSize: 10, padding: "2px 6px", borderRadius: 4, position: "relative" }}>
+                  Peak
+                  <div style={{ position: "absolute", bottom: -4, left: "50%", transform: "translateX(-50%)", width: 0, height: 0, borderLeft: "4px solid transparent", borderRight: "4px solid transparent", borderTop: "4px solid var(--bg-input)" }}></div>
+                </div>
+              )}
+              <div style={{ 
+                width: "100%", 
+                height: `${h}%`, 
+                background: h === 85 ? "var(--accent)" : "var(--bg-input)", 
+                borderRadius: "4px 4px 0 0",
+                transition: "height 0.3s"
+              }}></div>
+              <div style={{ fontSize: 10, color: "var(--text-secondary)" }}>{["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"][i]}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* ── Recent Scans List ── */}
+      <div className="bento-card">
+        <div className="card-title">Recent Scans</div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 16, overflowY: "auto", flex: 1 }}>
+          {stats.recentScans.map((scan, i) => {
+            const isHigh = scan.last_risk_score >= 6;
+            return (
+              <div key={i} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "8px 0", borderBottom: i === stats.recentScans.length - 1 ? "none" : "1px solid var(--border)" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                  <div style={{ 
+                    width: 40, height: 40, borderRadius: "var(--radius-sm)", color: "var(--text-secondary)",
+                    background: "var(--bg-input)", display: "flex", alignItems: "center", justifyContent: "center" 
+                  }}>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                  </div>
+                  <div>
+                    <div style={{ fontSize: 14, fontWeight: 500, color: "var(--text-primary)" }}>{scan.domain}</div>
+                    <div style={{ fontSize: 12, color: "var(--text-secondary)" }}>{scan.scan_count} scans</div>
+                  </div>
+                </div>
+                <div style={{ textAlign: "right" }}>
+                  <div style={{ fontSize: 14, fontWeight: 600 }}>{scan.last_risk_score}/10</div>
+                  <div style={{ fontSize: 10, color: isHigh ? "var(--critical)" : "var(--accent)", textTransform: "uppercase", fontWeight: 700 }}>
+                    {isHigh ? "High Risk" : "Safe"}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+          {stats.recentScans.length === 0 && (
+            <div className="text-muted" style={{ textAlign: "center", marginTop: 20 }}>No scans recorded yet.</div>
+          )}
+        </div>
+        <button style={{ 
+          width: "100%", padding: 12, background: "transparent", border: "1px solid var(--border)", 
+          borderRadius: "var(--radius-md)", color: "var(--text-primary)", fontWeight: 500, marginTop: 16 
+        }}>
+          All Scans
         </button>
       </div>
+
     </div>
   );
 }

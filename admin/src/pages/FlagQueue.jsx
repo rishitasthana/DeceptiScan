@@ -1,8 +1,3 @@
-/**
- * FlagQueue — review and approve/reject community dark pattern reports.
- * Updated to ShieldCheck light theme.
- */
-
 import React, { useState } from "react";
 import { useApi } from "../hooks/useApi";
 import { api } from "../api/client";
@@ -55,110 +50,128 @@ export default function FlagQueue() {
   const pendingCount = localReports.filter((r) => r.status === "pending").length;
 
   return (
-    <div className="page-container animate-in">
-      <div className="page-header">
+    <div className="page-container" style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+      <div className="flex-between">
         <div>
-          <h1 className="page-title">Flag Queue</h1>
-          <p className="page-subtitle">Review and moderate community-submitted dark pattern reports</p>
+          <h1 style={{ fontSize: 24, fontWeight: 700, marginBottom: 4 }}>Flag Queue</h1>
+          <p className="text-muted" style={{ fontSize: 14 }}>Review and moderate community-submitted dark pattern reports</p>
         </div>
-        <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+        <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
           {pendingCount > 0 && (
-            <span className="badge badge-high">{pendingCount} pending</span>
+            <span className="badge badge-red">{pendingCount} pending</span>
           )}
-          <button className="btn btn-outline" onClick={refetch}>Refresh</button>
+          <button style={{ 
+            background: "var(--bg-card)", color: "var(--text-primary)", 
+            padding: "8px 16px", borderRadius: "var(--radius-md)", border: "1px solid var(--border)",
+            fontWeight: 500 
+          }} onClick={refetch}>
+            Refresh
+          </button>
         </div>
       </div>
 
-      {/* Status tabs */}
-      <div className="tab-pills" style={{ marginBottom: 20 }}>
-        {STATUS_TABS.map((s) => (
-          <button
-            key={s}
-            className={`tab-pill${status === s ? " active" : ""}`}
-            onClick={() => setStatus(s)}
-          >
-            {s}
-          </button>
-        ))}
-      </div>
-
-      <div className="card">
-        <div className="card-header">
-          <span className="card-title">Community Reports</span>
-          <span style={{ fontSize: 12, color: "var(--text-secondary)" }}>{reports.length} reports</span>
+      <div className="bento-card" style={{ flex: 1, padding: 0, overflow: "hidden" }}>
+        
+        {/* Header and Tabs */}
+        <div className="flex-between" style={{ padding: "20px 24px", borderBottom: "1px solid var(--border)" }}>
+          <div style={{ display: "flex", gap: 8 }}>
+            {STATUS_TABS.map((s) => (
+              <button
+                key={s}
+                style={{
+                  padding: "6px 16px",
+                  borderRadius: 20,
+                  fontSize: 13,
+                  fontWeight: 600,
+                  textTransform: "capitalize",
+                  background: status === s ? "var(--text-primary)" : "transparent",
+                  color: status === s ? "var(--bg-card)" : "var(--text-secondary)",
+                  transition: "all 0.2s"
+                }}
+                onClick={() => setStatus(s)}
+              >
+                {s}
+              </button>
+            ))}
+          </div>
+          <span style={{ fontSize: 13, color: "var(--text-muted)", fontWeight: 500 }}>
+            {reports.length} reports
+          </span>
         </div>
 
         {loading && (
-          <div className="loading-spinner">
-            <div className="spinner-ring" />Loading reports…
+          <div className="flex-center" style={{ padding: 40 }}>
+            <div className="spinner" />
           </div>
         )}
 
         {!loading && reports.length === 0 && (
-          <div className="empty-state">
+          <div className="flex-center text-muted" style={{ padding: 40 }}>
             <p>No {status === "all" ? "" : status} reports.</p>
           </div>
         )}
 
         {!loading && reports.length > 0 && (
           <div style={{ overflowX: "auto" }}>
-            <table className="data-table">
+            <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
               <thead>
-                <tr>
-                  <th>Domain</th>
-                  <th>Pattern Type</th>
-                  <th>Description</th>
-                  <th>Status</th>
-                  <th>Submitted</th>
-                  <th>Actions</th>
+                <tr style={{ borderBottom: "1px solid var(--border)", color: "var(--text-secondary)", fontSize: 12, textTransform: "uppercase" }}>
+                  <th style={{ padding: "16px 24px", fontWeight: 600 }}>Domain</th>
+                  <th style={{ padding: "16px 24px", fontWeight: 600 }}>Pattern Type</th>
+                  <th style={{ padding: "16px 24px", fontWeight: 600 }}>Description</th>
+                  <th style={{ padding: "16px 24px", fontWeight: 600 }}>Status</th>
+                  <th style={{ padding: "16px 24px", fontWeight: 600 }}>Submitted</th>
+                  <th style={{ padding: "16px 24px", fontWeight: 600, textAlign: "right" }}>Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {reports.map((report) => (
-                  <tr key={report.id}>
-                    <td>
-                      <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                        <span style={{ fontWeight: 600 }}>{report.domain}</span>
-                      </div>
+                  <tr key={report.id} style={{ borderBottom: "1px solid var(--border)", transition: "background 0.2s" }} onMouseOver={(e) => e.currentTarget.style.background = "var(--bg-hover)"} onMouseOut={(e) => e.currentTarget.style.background = "transparent"}>
+                    <td style={{ padding: "16px 24px", fontWeight: 600, color: "var(--text-primary)" }}>
+                      {report.domain}
                     </td>
-                    <td>
-                      <span style={{
-                        padding: "2px 9px", borderRadius: 20, fontSize: 11,
-                        fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.3px",
-                        background: "var(--indigo-light)", color: "var(--indigo-dark)",
-                      }}>
+                    <td style={{ padding: "16px 24px" }}>
+                      <span className="badge badge-outline" style={{ background: "var(--bg-input)" }}>
                         {report.pattern_type?.replace(/_/g, " ")}
                       </span>
                     </td>
-                    <td style={{ maxWidth: 260, color: "var(--text-secondary)", fontSize: 12 }}>
+                    <td style={{ padding: "16px 24px", maxWidth: 260, color: "var(--text-secondary)", fontSize: 13, lineHeight: 1.4 }}>
                       {report.description}
                     </td>
-                    <td>
-                      <span className={`badge badge-${report.status}`}>
+                    <td style={{ padding: "16px 24px" }}>
+                      <span className={`badge ${report.status === 'approved' ? 'badge-green' : report.status === 'rejected' ? 'badge-red' : 'badge-outline'}`} style={{ textTransform: "capitalize" }}>
                         {report.status}
                       </span>
                     </td>
-                    <td style={{ fontSize: 12, color: "var(--text-muted)", whiteSpace: "nowrap" }}>
+                    <td style={{ padding: "16px 24px", fontSize: 13, color: "var(--text-muted)", whiteSpace: "nowrap" }}>
                       {report.created_at ? new Date(report.created_at).toLocaleDateString() : "—"}
                     </td>
-                    <td>
-                      {report.status === "pending" && (
-                        <div style={{ display: "flex", gap: 6 }}>
+                    <td style={{ padding: "16px 24px", textAlign: "right" }}>
+                      {report.status === "pending" ? (
+                        <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
                           <button
-                            className="btn btn-success btn-sm"
                             disabled={!!actionLoading}
                             onClick={() => handleAction(report.id, "approve")}
+                            style={{ 
+                              padding: "6px 12px", background: "var(--accent-transparent)", color: "var(--accent)", 
+                              borderRadius: "var(--radius-sm)", fontSize: 12, fontWeight: 600, border: "none"
+                            }}
                           >
-                            {actionLoading === report.id + "approve" ? "…" : "✓ Approve"}
+                            {actionLoading === report.id + "approve" ? "…" : "Approve"}
                           </button>
                           <button
-                            className="btn btn-danger btn-sm"
                             disabled={!!actionLoading}
                             onClick={() => handleAction(report.id, "reject")}
+                            style={{ 
+                              padding: "6px 12px", background: "rgba(239, 68, 68, 0.15)", color: "var(--critical)", 
+                              borderRadius: "var(--radius-sm)", fontSize: 12, fontWeight: 600, border: "none"
+                            }}
                           >
-                            {actionLoading === report.id + "reject" ? "…" : "✗ Reject"}
+                            {actionLoading === report.id + "reject" ? "…" : "Reject"}
                           </button>
                         </div>
+                      ) : (
+                        <span style={{ fontSize: 13, color: "var(--text-muted)" }}>—</span>
                       )}
                     </td>
                   </tr>
