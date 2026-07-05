@@ -38,6 +38,7 @@ async def list_products(
                     "risk_level": {"$first": "$risk_score.level"},
                     "scan_count": {"$sum": 1},
                     "last_scanned_at": {"$first": "$scanned_at"},
+                    "scan_id": {"$first": "$scan_id"},
                 }
             },
             {"$sort": {"last_risk_score": -1}},
@@ -60,6 +61,7 @@ async def list_products(
                 risk_level=d.get("risk_level", "low"),
                 scan_count=d.get("scan_count", 0),
                 last_scanned_at=d["last_scanned_at"],
+                scan_id=d.get("scan_id"),
             )
             for d in docs
         ]
@@ -107,6 +109,7 @@ async def get_recent_history(
                 risk_level=d.get("risk_level", "low"),
                 scan_count=d.get("scan_count", 0),
                 last_scanned_at=d["last_scanned_at"],
+                scan_id=d.get("scan_id"),
             )
             for d in docs
         ]

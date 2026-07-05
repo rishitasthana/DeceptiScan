@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const API_BASE = "http://localhost:8000";
 
 export default function Dashboard() {
+  const navigate = useNavigate();
   const [stats, setStats] = useState({ totalScans: 0, avgRisk: 0, recentScans: [] });
   const [loading, setLoading] = useState(true);
 
@@ -38,10 +40,13 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="page-container" style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gridAutoRows: "minmax(280px, auto)", gap: 16 }}>
+    <div className="page-container" style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+      
+      {/* Top Row */}
+      <div style={{ display: "flex", gap: 16, alignItems: "stretch" }}>
       
       {/* ── Overview Card ── */}
-      <div className="bento-card">
+      <div className="bento-card" style={{ flex: 2 }}>
         <div className="card-title">
           <span>Overview</span>
           <select style={{ background: "transparent", color: "var(--text-secondary)", border: "none", outline: "none", fontSize: 13, cursor: "pointer" }}>
@@ -80,10 +85,10 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <div>
+        <div style={{ flexShrink: 0 }}>
           <div style={{ fontSize: 14, fontWeight: 500, marginBottom: 4 }}>Recent Domains Analyzed</div>
           <div style={{ fontSize: 12, color: "var(--text-secondary)", marginBottom: 16 }}>Showing latest activity from the extension.</div>
-          <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
+          <div style={{ display: "flex", gap: 12, alignItems: "flex-start", flexWrap: "wrap" }}>
             {stats.recentScans.map((s, i) => (
               <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
                 <div style={{ 
@@ -99,19 +104,26 @@ export default function Dashboard() {
               </div>
             ))}
             {stats.recentScans.length > 0 && (
-              <button style={{ 
-                width: 48, height: 48, borderRadius: "50%", border: "1px dashed var(--border)",
-                display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text-secondary)"
-              }}>
-                →
-              </button>
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
+                <button 
+                  onClick={() => navigate('/history')}
+                  style={{ 
+                    width: 48, height: 48, borderRadius: "50%", border: "1px dashed var(--border)", background: "transparent",
+                    display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text-secondary)", cursor: "pointer"
+                  }}
+                  onMouseOver={(e) => { e.currentTarget.style.color = "var(--text-primary)"; e.currentTarget.style.borderColor = "var(--text-primary)"; }}
+                  onMouseOut={(e) => { e.currentTarget.style.color = "var(--text-secondary)"; e.currentTarget.style.borderColor = "var(--border)"; }}
+                >
+                  →
+                </button>
+              </div>
             )}
           </div>
         </div>
       </div>
 
       {/* ── Risk Distribution (Donut Chart placeholder) ── */}
-      <div className="bento-card">
+      <div className="bento-card" style={{ flex: 1 }}>
         <div className="card-title">Risk Distribution</div>
         <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
           {/* SVG Donut */}
@@ -138,9 +150,14 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
+      
+      </div> {/* End Top Row */}
+
+      {/* Bottom Row */}
+      <div style={{ display: "flex", gap: 16, alignItems: "stretch" }}>
 
       {/* ── Scan Volume (Bar Chart placeholder) ── */}
-      <div className="bento-card">
+      <div className="bento-card" style={{ flex: 2 }}>
         <div className="card-title">
           <span>Scan Volume</span>
           <select style={{ background: "transparent", color: "var(--text-secondary)", border: "none", outline: "none", fontSize: 13, cursor: "pointer" }}>
@@ -176,7 +193,7 @@ export default function Dashboard() {
       </div>
 
       {/* ── Recent Scans List ── */}
-      <div className="bento-card">
+      <div className="bento-card" style={{ flex: 1 }}>
         <div className="card-title">Recent Scans</div>
         <div style={{ display: "flex", flexDirection: "column", gap: 16, overflowY: "auto", flex: 1 }}>
           {stats.recentScans.map((scan, i) => {
@@ -208,13 +225,20 @@ export default function Dashboard() {
             <div className="text-muted" style={{ textAlign: "center", marginTop: 20 }}>No scans recorded yet.</div>
           )}
         </div>
-        <button style={{ 
-          width: "100%", padding: 12, background: "transparent", border: "1px solid var(--border)", 
-          borderRadius: "var(--radius-md)", color: "var(--text-primary)", fontWeight: 500, marginTop: 16 
-        }}>
+        <button 
+          onClick={() => navigate('/history')}
+          style={{ 
+            width: "100%", padding: 12, background: "transparent", border: "1px solid var(--border)", 
+            borderRadius: "var(--radius-md)", color: "var(--text-primary)", fontWeight: 500, marginTop: 16, cursor: "pointer", transition: "all 0.2s" 
+          }}
+          onMouseOver={(e) => { e.currentTarget.style.background = "var(--bg-input)"; }}
+          onMouseOut={(e) => { e.currentTarget.style.background = "transparent"; }}
+        >
           All Scans
         </button>
       </div>
+
+      </div> {/* End Bottom Row */}
 
     </div>
   );

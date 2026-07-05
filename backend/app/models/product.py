@@ -16,6 +16,7 @@ class ProductSummary(BaseModel):
     risk_level: str  # low | medium | high | critical
     scan_count: int
     last_scanned_at: datetime
+    scan_id: Optional[str] = None
     flagged: bool = False
 
 

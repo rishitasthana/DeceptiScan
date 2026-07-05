@@ -45,8 +45,11 @@ export default function ScanHistory() {
         <button style={{ 
           background: "var(--bg-card)", color: "var(--text-primary)", 
           padding: "8px 16px", borderRadius: "var(--radius-md)", border: "1px solid var(--border)",
-          fontWeight: 500 
-        }} onClick={refetch}>
+          fontWeight: 500, cursor: "pointer", transition: "all 0.2s"
+        }} 
+        onMouseOver={(e) => { e.currentTarget.style.background = "var(--bg-hover)"; }}
+        onMouseOut={(e) => { e.currentTarget.style.background = "var(--bg-card)"; }}
+        onClick={refetch}>
           Refresh
         </button>
       </div>
@@ -135,12 +138,14 @@ export default function ScanHistory() {
                       </td>
                       <td style={{ padding: "16px 24px", textAlign: "right" }}>
                         <a
-                          href={`http://localhost:8000/products/${encodeURIComponent(p.domain)}`}
+                          href={p.scan_id ? `http://localhost:8000/report/html/${p.scan_id}` : `http://localhost:8000/products/${encodeURIComponent(p.domain)}`}
                           target="_blank" rel="noreferrer"
                           style={{ 
                             padding: "8px 12px", background: "var(--bg-input)", color: "var(--text-primary)", 
-                            borderRadius: "var(--radius-md)", fontSize: 12, fontWeight: 500 
+                            borderRadius: "var(--radius-md)", fontSize: 12, fontWeight: 500, textDecoration: "none"
                           }}
+                          onMouseOver={(e) => { e.currentTarget.style.background = "var(--primary)"; e.currentTarget.style.color = "#1c1c1c"; }}
+                          onMouseOut={(e) => { e.currentTarget.style.background = "var(--bg-input)"; e.currentTarget.style.color = "var(--text-primary)"; }}
                         >
                           View Report →
                         </a>

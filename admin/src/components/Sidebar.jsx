@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 
 const NAV_ITEMS = [
@@ -27,6 +27,17 @@ const NAV_ITEMS = [
 ];
 
 export default function Sidebar() {
+  const [showSettings, setShowSettings] = useState(false);
+  const settingsRef = useRef();
+
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if (settingsRef.current && !settingsRef.current.contains(e.target)) setShowSettings(false);
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   return (
     <aside style={{
       width: "var(--sidebar-w)",
@@ -48,7 +59,7 @@ export default function Sidebar() {
         }}>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ color: "var(--accent)" }}><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
         </div>
-        <span style={{ fontSize: 16, fontWeight: 700, letterSpacing: 0.5, color: "var(--text-primary)" }}>ShieldCheck</span>
+        <span style={{ fontSize: 16, fontWeight: 700, letterSpacing: 0.5, color: "var(--text-primary)" }}>DeceptiScan</span>
       </div>
 
       {/* Navigation */}
@@ -104,23 +115,40 @@ export default function Sidebar() {
       </nav>
 
       {/* Bottom Actions */}
-      <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-        <button style={{
-          display: "flex", alignItems: "center", justifyContent: "center",
-          width: 40, height: 40, borderRadius: "50%",
-          background: "var(--bg-active)", color: "var(--text-secondary)",
-          transition: "all 0.2s"
-        }}>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
-        </button>
-        <button style={{
-          display: "flex", alignItems: "center", justifyContent: "center",
-          width: 40, height: 40, borderRadius: "50%",
-          background: "var(--bg-active)", color: "var(--text-secondary)",
-          transition: "all 0.2s"
-        }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 12, position: "relative" }} ref={settingsRef}>
+        <button 
+          onClick={() => setShowSettings(!showSettings)}
+          style={{
+            display: "flex", alignItems: "center", justifyContent: "center",
+            width: 40, height: 40, borderRadius: "50%",
+            background: showSettings ? "var(--bg-hover)" : "var(--bg-active)", color: showSettings ? "var(--text-primary)" : "var(--text-secondary)",
+            cursor: "pointer", transition: "all 0.2s"
+          }}
+          onMouseOver={(e) => { e.currentTarget.style.color = "var(--text-primary)"; e.currentTarget.style.transform = "rotate(45deg)"; }}
+          onMouseOut={(e) => { if(!showSettings) { e.currentTarget.style.color = "var(--text-secondary)"; e.currentTarget.style.transform = "rotate(0deg)"; } }}
+        >
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
         </button>
+        
+        {showSettings && (
+          <div style={{
+            position: "absolute", bottom: 0, left: 56, width: 240,
+            background: "var(--bg-card)", border: "1px solid var(--border)",
+            borderRadius: "var(--radius-md)", boxShadow: "0 10px 30px rgba(0,0,0,0.5)",
+            zIndex: 100, padding: 8
+          }}>
+            <div style={{ padding: "12px", borderBottom: "1px solid var(--border)", marginBottom: 8 }}>
+              <div style={{ fontSize: 14, fontWeight: 600 }}>Preferences</div>
+            </div>
+            <div style={{ padding: "8px 12px", fontSize: 13, cursor: "pointer", borderRadius: 4, display: "flex", justifyContent: "space-between" }} onMouseOver={(e) => e.currentTarget.style.background="var(--bg-hover)"} onMouseOut={(e) => e.currentTarget.style.background="transparent"}>
+              <span>Dark Mode</span>
+              <span style={{ color: "var(--accent)" }}>On</span>
+            </div>
+            <div style={{ padding: "8px 12px", fontSize: 13, cursor: "pointer", borderRadius: 4 }} onMouseOver={(e) => e.currentTarget.style.background="var(--bg-hover)"} onMouseOut={(e) => e.currentTarget.style.background="transparent"}>Notification Settings</div>
+            <div style={{ padding: "8px 12px", fontSize: 13, cursor: "pointer", borderRadius: 4 }} onMouseOver={(e) => e.currentTarget.style.background="var(--bg-hover)"} onMouseOut={(e) => e.currentTarget.style.background="transparent"}>Manage API Keys</div>
+            <div style={{ padding: "8px 12px", fontSize: 13, cursor: "pointer", borderRadius: 4 }} onMouseOver={(e) => e.currentTarget.style.background="var(--bg-hover)"} onMouseOut={(e) => e.currentTarget.style.background="transparent"}>System Status</div>
+          </div>
+        )}
       </div>
     </aside>
   );

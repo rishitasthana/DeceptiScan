@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Dark Pattern Detector",
+  "name": "DeceptiScan",
   "version": "1.0.0",
   "description": "Detects manipulative dark patterns in financial product websites using AI.",
   "icons": {
@@ -35,7 +35,7 @@
       "16": "icons/icon16.png",
       "48": "icons/icon48.png"
     },
-    "default_title": "Dark Pattern Detector"
+    "default_title": "DeceptiScan"
   },
   "content_security_policy": {
     "extension_pages": "script-src 'self'; object-src 'self'"

@@ -140,8 +140,11 @@ export default function ModelMetrics() {
         <button style={{ 
           background: "var(--bg-card)", color: "var(--text-primary)", 
           padding: "8px 16px", borderRadius: "var(--radius-md)", border: "1px solid var(--border)",
-          fontWeight: 500 
-        }} onClick={refetch}>
+          fontWeight: 500, cursor: "pointer", transition: "all 0.2s"
+        }} 
+        onMouseOver={(e) => { e.currentTarget.style.background = "var(--bg-hover)"; }}
+        onMouseOut={(e) => { e.currentTarget.style.background = "var(--bg-card)"; }}
+        onClick={refetch}>
           Refresh
         </button>
       </div>

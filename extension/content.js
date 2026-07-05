@@ -378,7 +378,7 @@
 
       <div class="dpd-card" id="dpd-main">
         <div class="dpd-header">
-          <div class="dpd-title">ShieldCheck</div>
+          <div class="dpd-title">DeceptiScan</div>
           <button class="dpd-close" id="dpd-close">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
           </button>
@@ -398,7 +398,7 @@
         <div class="dpd-footer">
           <button class="dpd-btn-primary" id="dpd-report-btn">See Full Report →</button>
           <button class="dpd-dismiss-btn" id="dpd-dismiss-btn">Dismiss</button>
-          <div class="dpd-branding">Secured by ShieldCheck AI • v2.4.0</div>
+          <div class="dpd-branding">Secured by DeceptiScan AI • v2.4.0</div>
         </div>
       </div>
     `;
