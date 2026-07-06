@@ -1,4 +1,4 @@
-# 🔍 Dark Pattern Detector for Financial Products
+# DeceptiScan - Dark Pattern Detector for Financial Products
 
 A full-stack ML system that detects manipulative dark patterns in financial product websites (credit cards, loans, insurance apps) in real time.
 
