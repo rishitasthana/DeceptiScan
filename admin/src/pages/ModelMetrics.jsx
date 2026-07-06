@@ -6,23 +6,7 @@ import {
   Tooltip, Legend, ResponsiveContainer,
 } from "recharts";
 
-// Mock metrics for local dev
-const MOCK_NLP = {
-  fee_burial:          { precision: 0.91, recall: 0.87, f1: 0.89 },
-  auto_renewal_trap:   { precision: 0.86, recall: 0.82, f1: 0.84 },
-  urgency_language:    { precision: 0.79, recall: 0.75, f1: 0.77 },
-  ambiguous_opt_out:   { precision: 0.72, recall: 0.68, f1: 0.70 },
-  misleading_free:     { precision: 0.83, recall: 0.80, f1: 0.81 },
-  clean:               { precision: 0.95, recall: 0.93, f1: 0.94 },
-};
 
-const MOCK_CV = {
-  pre_checked_consent:  { precision: 0.88, recall: 0.85, f1: 0.86 },
-  hidden_unsubscribe:   { precision: 0.76, recall: 0.72, f1: 0.74 },
-  misleading_cta_color: { precision: 0.82, recall: 0.79, f1: 0.80 },
-  small_print_placement:{ precision: 0.70, recall: 0.66, f1: 0.68 },
-  clean:                { precision: 0.93, recall: 0.91, f1: 0.92 },
-};
 
 const CustomTooltip = ({ active, payload, label }) => {
   if (!active || !payload?.length) return null;
@@ -125,8 +109,8 @@ function MetricsSection({ title, tag, metrics }) {
 export default function ModelMetrics() {
   const { data, loading, error, refetch } = useApi(() => api.getMetrics());
 
-  const nlpMetrics = data?.data?.nlp_metrics || MOCK_NLP;
-  const cvMetrics  = data?.data?.cv_metrics  || MOCK_CV;
+  const nlpMetrics = data?.data?.nlp_metrics || {};
+  const cvMetrics  = data?.data?.cv_metrics  || {};
   const nlpF1 = avgF1(nlpMetrics);
   const cvF1  = avgF1(cvMetrics);
 

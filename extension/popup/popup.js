@@ -546,6 +546,7 @@ async function init() {
     const url = `${API_BASE}/report/pdf/${currentScan.scan_id}`;
     navigator.clipboard.writeText(url).then(() => {
       showToast("Copied report link!");
+      window.open(url, "_blank");
     }).catch(err => {
       console.error("Clipboard copy failed:", err);
       showToast("Failed to copy link");

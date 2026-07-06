@@ -44,7 +44,7 @@ export const api = {
   rejectReport: (id) => client.patch(`/community/report/${id}/reject`),
 
   /** Fetch model performance metrics */
-  getMetrics: () => client.get("/report/metrics"),
+  getMetrics: () => client.get("/metrics"),
 
   /** Get health status */
   health: () => client.get("/health"),

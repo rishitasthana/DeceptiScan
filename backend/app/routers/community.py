@@ -39,7 +39,6 @@ def _require_admin(x_api_key: str = Header(default="")) -> None:
 @router.post("/report", response_model=CommunityReportResponse, status_code=201)
 async def submit_report(
     request: CommunityReportRequest,
-    token_data: dict = Depends(verify_token),
 ) -> CommunityReportResponse:
     """Accept a user-submitted dark pattern flag.
 

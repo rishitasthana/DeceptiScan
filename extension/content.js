@@ -594,10 +594,9 @@
 
   const isFinancialPage = isUrlMatch || isBodyMatch;
 
-  // Retrieve forceScan flag
-  const forceScan = await new Promise((resolve) => {
-    chrome.storage.local.get("forceScan", (data) => {
-      resolve(data.forceScan || false);
+  const [forceScan, autoScanEnabled] = await new Promise((resolve) => {
+    chrome.storage.local.get({ forceScan: false, settingAutoScan: true }, (data) => {
+      resolve([data.forceScan, data.settingAutoScan]);
     });
   });
 
@@ -605,8 +604,8 @@
     chrome.storage.local.remove("forceScan");
   }
 
-  if (!isFinancialPage && !forceScan) {
-    console.log("[DPD] Not a financial page, skipping auto-scan.", currentDomain);
+  if (!forceScan && (!isFinancialPage || !autoScanEnabled)) {
+    console.log("[DPD] Skipping auto-scan. isFinancial:", isFinancialPage, "autoScanEnabled:", autoScanEnabled);
     // Message listener is already registered above — manual scans will still work.
     return;
   }
