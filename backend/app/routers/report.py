@@ -38,7 +38,13 @@ _HTML_REPORT = """<!DOCTYPE html>
   body {{ font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }}
 
   /* Hero */
-  .hero {{ background: var(--bg); border-bottom: 1px solid var(--border); padding: 48px 32px 40px; text-align: center; }}
+  .hero {{ position: relative; z-index: 1; background: var(--bg); border-bottom: 1px solid var(--border); padding: 48px 32px 40px; text-align: center; overflow: hidden; }}
+  .hero::before {{ content: ""; position: absolute; top: -50%; left: -50%; right: -50%; bottom: 0; z-index: -1; background: radial-gradient(circle at 50% 0%, var(--glow, transparent) 0%, transparent 60%); opacity: 0.15; pointer-events: none; }}
+  .glow-critical {{ --glow: var(--critical); }}
+  .glow-high {{ --glow: var(--high); }}
+  .glow-medium {{ --glow: var(--medium); }}
+  .glow-low {{ --glow: var(--low); }}
+
   .logo {{ font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 3px; color: var(--accent); text-transform: uppercase; margin-bottom: 24px; opacity: 0.8; }}
   .hero h1 {{ font-family: 'Space Grotesk', sans-serif; font-size: 28px; font-weight: 700; margin-bottom: 8px; color: var(--text); }}
   .hero .meta {{ color: var(--muted); font-size: 13px; margin-top: 8px; font-weight: 500; }}
@@ -125,7 +131,7 @@ _HTML_REPORT = """<!DOCTYPE html>
 </head>
 <body>
 
-<div class="hero">
+<div class="hero glow-{level}">
 <div class="logo">DeceptiScan</div>
   <h1>{title}</h1>
   <div class="meta">
