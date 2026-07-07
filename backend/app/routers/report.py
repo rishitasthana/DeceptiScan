@@ -8,6 +8,7 @@ from fastapi.responses import HTMLResponse, Response
 
 from app.database import col_scan_history
 from app.models.scan import ScanResult
+from app.services.pdf_service import generate_pdf_report
 
 router = APIRouter(prefix="/report", tags=["Reports"])
 logger = structlog.get_logger(__name__)
@@ -312,6 +313,30 @@ async def get_html_report(scan_id: str) -> HTMLResponse:
         raise
     except Exception as exc:
         logger.error("HTML report failed", scan_id=scan_id, error=str(exc))
+        raise HTTPException(status_code=500, detail=str(exc))
+
+
+@router.get("/pdf/{scan_id}", response_class=Response)
+async def get_pdf_report(scan_id: str) -> Response:
+    """Return a PDF report for a completed scan. No auth required.
+
+    Args:
+        scan_id: UUID of the scan to report on.
+
+    Returns:
+        PDF file bytes.
+    """
+    try:
+        doc = await col_scan_history().find_one({"scan_id": scan_id}, {"_id": 0})
+        if not doc:
+            raise HTTPException(status_code=404, detail=f"Scan not found: {scan_id}")
+        scan = ScanResult(**doc)
+        pdf_bytes = await generate_pdf_report(scan)
+        return Response(content=pdf_bytes, media_type="application/pdf")
+    except HTTPException:
+        raise
+    except Exception as exc:
+        logger.error("PDF report failed", scan_id=scan_id, error=str(exc))
         raise HTTPException(status_code=500, detail=str(exc))
 
 
