@@ -324,7 +324,8 @@ function bindSettingsEvents() {
  * Convert snake_case to Title Case.
  */
 function humanize(str) {
-  return str.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+  const clean = String(str).split('.').pop();
+  return clean.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
 }
 
 

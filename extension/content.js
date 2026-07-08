@@ -483,7 +483,8 @@
    * @returns {string} Human-readable string.
    */
   function _humanize(label) {
-    return label
+    const clean = String(label).split('.').pop();
+    return clean
       .replace(/_/g, " ")
       .replace(/\b\w/g, (c) => c.toUpperCase());
   }

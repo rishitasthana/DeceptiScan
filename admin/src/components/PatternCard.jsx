@@ -33,7 +33,8 @@ const SEVERITY_LABELS = { 1: "Low", 2: "Low", 3: "Medium", 4: "Medium", 5: "High
 export default function PatternCard({ label, description, severity, confidence, text, variant = "row" }) {
   const [expanded, setExpanded] = useState(false);
   const color = TYPE_COLORS[label] || "#6366F1";
-  const humanLabel = label.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+  const cleanLabel = String(label).split('.').pop();
+  const humanLabel = cleanLabel.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
   const sevScore = severity ? Math.round(severity * 10) : null;
   const sevLabel = sevScore ? SEVERITY_LABELS[sevScore] || "Medium" : null;
 
